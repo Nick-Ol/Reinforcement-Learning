@@ -1,0 +1,11 @@
+# Matlab :
+*.asv
+*.eps
+*.m~
+
+#Tex :
+*.pdf
+*.synctex.gz
+*.log
+*.aux
+*.bbl
