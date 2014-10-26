@@ -20,20 +20,12 @@ pi=2*ones(1,M+1);%exemple de politique
 n=1000;
 
 [X,R] = trajectory(n,x0,pi,D,M,K,h,c,pr);
-
 plot(cumsum(gamma.^((1:n)-1).*R))
+
+
 
 % Estimation du la récompense cumulée discountée
 
-MCn = 1000;
-MCestim = 0;
-i = 1;
-while i <= MCn
-    [X, R] = trajectory(n,x0,pi,D,M,K,h,c,pr);
-    MCestim = MCestim + sum(gamma.^((1:n)-1).*R);
-    i = i+1;
-end
-disp(MCestim/MCn)
     
 
 %% Calcul des paramètres du MDP
@@ -41,7 +33,7 @@ disp(MCestim/MCn)
 [P,R]=MDP(D,M,K,h,c,pr);
 
 pol_eval_1(pi, P, R, gamma)
-pol_eval_2(1000,n,x0,pi,D,M,K,h,c,pr,gamma)
+%pol_eval_2(100,n,1:15,pi,D,M,K,h,c,pr,gamma)
 
 %% Value iteration
 
