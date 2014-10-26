@@ -30,10 +30,12 @@ plot(cumsum(gamma.^((1:n)-1).*R))
 
 %% Calcul des paramètres du MDP
 
+[newP, newR] = policy_matrices(P, R, pi);
 [P,R]=MDP(D,M,K,h,c,pr);
-
+V0 = ((1:16) - ones(1,16))';
 pol_eval_1(pi, P, R, gamma)
-%pol_eval_2(100,n,1:15,pi,D,M,K,h,c,pr,gamma)
+pol_eval_3(pi, P, R, gamma, V0 , 600)
+pol_eval_2(500,n,V0,pi,D,M,K,h,c,pr,gamma)
 
 %% Value iteration
 
