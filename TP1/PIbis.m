@@ -2,6 +2,7 @@ function [V, pi] = PIbis(P, R, gamma, n_it)
 %PI using pol_eval_1 instead of 3, to compare the time of execution
 
 n = length(R(1,:));
+Q = zeros(n,n);
 pi = ones(n,1); %column vector
 
 for k = 1:n_it

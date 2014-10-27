@@ -1,6 +1,7 @@
 function [V, pi] = PI(P, R, gamma, n_it)
 
 n = length(R(1,:));
+Q = zeros(n,n);
 pi = ones(n,1); %column vector
 
 for k = 1:n_it
