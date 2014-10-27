@@ -49,16 +49,21 @@ toc
 
 
 %% Policy iteration 
-[VPI, piPI] = PI(P,R, gamma, (1:16)', 1000)
-[VVI, piVI] = VI(P, R, gamma, (1:16)', 150)
+[VPI, piPI] = PI(P,R, gamma, (1:16)', 500)
+[VVI, piVI] = VI(P, R, gamma, (1:16)', 500)
 
-K= 150;
+K= 50;
 errVI = zeros(1, K);
+errPI = zeros(1, K);
+
 for iter = 1:K
-    [V, piV] = VI(P, R, gamma, (1:16)', iter); %probable Schlemiel, starting from 0 again each time
-    errVI(iter) = max(abs(V-VVI));
+    [Vvalue, piV] = VI(P, R, gamma, (1:16)', iter); %probable Schlemiel, starting from 0 again each time
+    errVI(iter) = max(abs(Vvalue-VVI));
+    [Vpolicy, piP] = PI(P,R, gamma, (1:16)', iter)
+    errPI(iter) = max(abs(Vpolicy - VPI));
 end
-plot(errVI)
+
+plot(1:K, errVI, 1:K, errPI)
 
 
 %% Q-Learning
