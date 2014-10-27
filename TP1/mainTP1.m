@@ -63,7 +63,8 @@ for iter = 1:K
     errPI(iter) = max(abs(Vpolicy - VPI));
 end
 
-plot(1:K, errVI, 1:K, errPI)
-
+plot(1:K, errVI, 1:K, errPI);
+legend({'Error for Value iteration', 'Error for Policy iteration'});
+%we state that the PI algorithm converges much faster than VI
 
 %% Q-Learning
