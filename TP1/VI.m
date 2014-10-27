@@ -1,8 +1,8 @@
-function [V, pi] = VI(P, R, gamma, V0, n_it)
+function [V, pi] = VI(P, R, gamma, n_it)
 
 n = length(R(1,:));
 Q = zeros(n,n);
-V= V0;
+V= ones(n,1);
 for k = 1:n_it
     for i = 1:n
         for j = 1:n

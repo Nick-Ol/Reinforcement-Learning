@@ -44,7 +44,7 @@ nb_it=100;
 V0=zeros(M+1,1);
 
 tic
-[V, pol]=VI(P,R,gamma,V0,nb_it);
+[V, pol]=VI(P,R,gamma,nb_it);
 toc
 
 
@@ -58,19 +58,19 @@ toc
 tic
 [V, pol]=PIbis(P,R, gamma, nb_it);
 toc
-%much Faster using PIBis !
-%and PIBis faster than VI for the same number of iterations
+%much faster using PIbis !
+%and PIbis faster than VI for the same number of iterations
 
 
 [VPI, piPI] = PIbis(P,R, gamma, 500)
-[VVI, piVI] = VI(P, R, gamma, (1:16)', 500)
+[VVI, piVI] = VI(P, R, gamma, 500)
 
 K= 50;
 errVI = zeros(1, K);
 errPI = zeros(1, K);
 
 for iter = 1:K
-    [Vvalue, piV] = VI(P, R, gamma, (1:16)', iter); %probable Schlemiel, starting from 0 again each time
+    [Vvalue, piV] = VI(P, R, gamma, iter); %probable Schlemiel, starting from 0 again each time
     errVI(iter) = max(abs(Vvalue-VVI));
     [Vpolicy, piP] = PIbis(P,R, gamma, iter);
     errPI(iter) = max(abs(Vpolicy - VPI));
