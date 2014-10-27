@@ -5,7 +5,7 @@ pi = ones(1,n);
 
 for k = 1:n_it
     %policy evaluation using bellman operator
-    V = pol_eval_3(pi, P, R ,gamma, V0, 100); 
+    V = pol_eval_3(pi, P, R ,gamma, V0, 500); %magic number 
     for i = 1:n
         for j = 1:n
             Q(i,j) = R(i,j) + gamma.* P(i,:,j)*V;

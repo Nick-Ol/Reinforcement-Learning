@@ -48,6 +48,6 @@ toc
 
 
 %% Policy iteration 
-
+[piPI, VPI] = PI(P,R, gamma, (1:16)', 10);
 
 %% Q-Learning
