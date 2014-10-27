@@ -10,7 +10,7 @@ for k = 1:n_it
         for j = 1:n
             Q(i,j) = R(i,j) + gamma.* P(i,:,j)*V;
         end
-    pi(i)= find(Q(i,:)==max(Q(i,:))); %update the policy
+        pi(i)= find(Q(i,:)==max(Q(i,:))); %update the policy
     end
 end
    

@@ -35,7 +35,7 @@ plot(cumsum(gamma.^((1:n)-1).*R))
 [newP, newR] = policy_matrices(P, R, pi);
 V0 = ((1:16) - ones(1,16))';
 pol_eval_1(pi, P, R, gamma)
-pol_eval_3(pi, P, R, gamma, V0 , 600)
+pol_eval_3(pi, P, R, gamma, 600)
 pol_eval_2(500,n,V0,pi,D,M,K,h,c,pr,gamma)
 
 %% Value iteration
@@ -51,7 +51,7 @@ toc
 %% Policy iteration 
 %which one is the fastest ?
 tic
-[V, pol]=PI(P,R, gamma, (1:16)', nb_it);
+[V, pol]=PI(P,R, gamma, nb_it);
 %note that 500 iterations are used for policy evaluation (arbitrary)
 toc
 
