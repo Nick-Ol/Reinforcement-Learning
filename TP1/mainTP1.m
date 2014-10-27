@@ -48,6 +48,7 @@ toc
 
 
 %% Policy iteration 
-[VPI, piPI] = PI(P,R, gamma, (1:16)', 500);
+[VPI, piPI] = PI(P,R, gamma, (1:16)', 1000)
+[VVI, piVI] = VI(P, R, gamma, (1:16)', 1000)
 
 %% Q-Learning
