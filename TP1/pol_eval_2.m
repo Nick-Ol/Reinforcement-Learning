@@ -1,6 +1,6 @@
 function [V] = pol_eval_2(MCn,n,V0,pi,D,M,K,h,c,pr,gamma)
 %policy evaluation using montecarlo
-V = zeros(length(V0), 1); %single row vector please
+V = zeros(length(V0), 1); %single column vector please
 
 for i = 1:length(V0)
     for k = 1:MCn
@@ -10,8 +10,6 @@ for i = 1:length(V0)
 end
 
 V = V ./MCn;
-
-
 
 end
 
