@@ -59,7 +59,7 @@ errPI = zeros(1, K);
 for iter = 1:K
     [Vvalue, piV] = VI(P, R, gamma, (1:16)', iter); %probable Schlemiel, starting from 0 again each time
     errVI(iter) = max(abs(Vvalue-VVI));
-    [Vpolicy, piP] = PI(P,R, gamma, (1:16)', iter)
+    [Vpolicy, piP] = PI(P,R, gamma, (1:16)', iter);
     errPI(iter) = max(abs(Vpolicy - VPI));
 end
 
