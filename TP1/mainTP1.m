@@ -30,8 +30,9 @@ plot(cumsum(gamma.^((1:n)-1).*R))
 
 %% Calcul des paramètres du MDP
 
-[newP, newR] = policy_matrices(P, R, pi);
 [P,R]=MDP(D,M,K,h,c,pr);
+
+[newP, newR] = policy_matrices(P, R, pi);
 V0 = ((1:16) - ones(1,16))';
 pol_eval_1(pi, P, R, gamma)
 pol_eval_3(pi, P, R, gamma, V0 , 600)
@@ -49,6 +50,15 @@ toc
 
 %% Policy iteration 
 [VPI, piPI] = PI(P,R, gamma, (1:16)', 1000)
-[VVI, piVI] = VI(P, R, gamma, (1:16)', 1000)
+[VVI, piVI] = VI(P, R, gamma, (1:16)', 150)
+
+K= 150;
+errVI = zeros(1, K);
+for iter = 1:K
+    [V, piV] = VI(P, R, gamma, (1:16)', iter); %probable Schlemiel, starting from 0 again each time
+    errVI(iter) = max(abs(V-VVI));
+end
+plot(errVI)
+
 
 %% Q-Learning
