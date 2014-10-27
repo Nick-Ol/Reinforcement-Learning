@@ -81,3 +81,4 @@ legend({'Error for Value iteration', 'Error for Policy iteration'});
 %we state that the PI algorithm converges much faster than VI
 
 %% Q-Learning
+Qlearning(0.2, 1000, 100,M,K,h,c,pr)
