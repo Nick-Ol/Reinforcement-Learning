@@ -1,7 +1,7 @@
 function [V, pi] = PI(P, R, gamma, V0, n_it)
 
 n = length(R(1,:));
-pi = ones(1,n);
+pi = ones(n,1); %column vector
 
 for k = 1:n_it
     %policy evaluation using bellman operator

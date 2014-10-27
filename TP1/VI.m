@@ -12,7 +12,7 @@ for k = 1:n_it
     end
 end
 
-pi = zeros(1, n);
+pi = zeros(n, 1); %column vector
 for i = 1:n
     pi(i) = find(Q(i,:)==max(Q(i,:))); %find the optimal policy
 end
