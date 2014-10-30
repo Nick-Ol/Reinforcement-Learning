@@ -51,18 +51,18 @@ toc
 %% Policy iteration 
 %which one is the fastest ?
 tic
-[V, pol]=PI(P,R, gamma, nb_it);
+[V, pol]=PI(P,R, gamma, nb_it, 1);
 %note that 500 iterations are used for policy evaluation (arbitrary)
 toc
 
 tic
-[V, pol]=PIbis(P,R, gamma, nb_it);
+[V, pol]=PI(P,R, gamma, nb_it,3);
 toc
-%much faster using PIbis !
-%and PIbis faster than VI for the same number of iterations
+%much faster using pol_eval_1 !
+%and PI with pol_eval_1 much faster than VI for the same number of iterations
 
 
-[V_PI, pi_PI] = PIbis(P,R, gamma, 500)
+[V_PI, pi_PI] = PI(P,R, gamma, 500,1)
 [V_VI, pi_VI] = VI(P, R, gamma, 500)
 
 K= 50;
@@ -72,7 +72,7 @@ errPI = zeros(1, K);
 for iter = 1:K
     [V_value, piV] = VI(P, R, gamma, iter); %probable Schlemiel, starting from 0 again each time
     errVI(iter) = max(abs(V_value-V_VI));
-    [V_policy, piP] = PIbis(P,R, gamma, iter);
+    [V_policy, piP] = PI(P,R, gamma, iter, 1);
     errPI(iter) = max(abs(V_policy - V_PI));
 end
 
