@@ -14,7 +14,7 @@ end
 
 pi = zeros(n, 1); %column vector
 for x = 1:n
-    pi(x) = find(Q(x,:)==max(Q(x,:))); %find the optimal policy
+    pi(x) = find(Q(x,:)==max(Q(x,:))) - 1; %find the optimal policy
 end
 
 
