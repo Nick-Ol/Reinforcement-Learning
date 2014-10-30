@@ -10,11 +10,12 @@ pi = ones(n,1); %column vector
 for k = 1:n_it
     %policy evaluation using bellman operator
     V = pol_eval_1(pi, P, R ,gamma);
-    for i = 1:n
-        for j = 1:n
-            Q(i,j) = R(i,j) + gamma.* P(i,:,j)*V;
+    for x = 1:n
+        for a = 1:n
+            Q(x,a) = R(x,a) + gamma.* P(x,:,a)*V;
         end
-    pi(i)= find(Q(i,:)==max(Q(i,:))) - 1; %update the policy
+    [val, indx] = max(Q(x,:));
+    pi(x)= indx -1; %update the policy
     end
 end
    

@@ -11,7 +11,8 @@ for k = 1:n_it
         for a = 1:n
             Q(x,a) = R(x,a) + gamma.* P(x,:,a)*V;
         end
-        pi(x)= find(Q(x,:)==max(Q(x,:))) -1 ; %Correcting this line after 3 hours, I happily remember CN asking me "Oh, why do array start at 0 in C?"
+        [val, indx] = max(Q(x,:));
+        pi(x)= indx -1 ; %Correcting this line after 3 hours, I happily remember CN asking me "Oh, why do array start at 0 in C?"
         %update the policy
     end
 end
