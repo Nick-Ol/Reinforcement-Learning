@@ -4,17 +4,17 @@ n = length(R(1,:));
 Q = zeros(n,n);
 V= ones(n,1);
 for k = 1:n_it
-    for i = 1:n
-        for j = 1:n
-            Q(i,j) = R(i,j) + gamma.* P(i,:,j)*V;          
+    for x = 1:n
+        for a = 1:n
+            Q(x,a) = R(x,a) + gamma.* P(x,:,a)*V;          
         end
-        V(i) = max(Q(i,:)); %update the value, for each initial state i
+        V(x) = max(Q(x,:)); %update the value, for each initial state i
     end
 end
 
 pi = zeros(n, 1); %column vector
-for i = 1:n
-    pi(i) = find(Q(i,:)==max(Q(i,:))); %find the optimal policy
+for x = 1:n
+    pi(x) = find(Q(x,:)==max(Q(x,:))); %find the optimal policy
 end
 
 
