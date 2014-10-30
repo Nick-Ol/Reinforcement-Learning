@@ -32,7 +32,7 @@ plot(cumsum(gamma.^((1:n)-1).*R))
 
 [P,R]=MDP(D,M,K,h,c,pr);
 
-[newP, newR] = policy_matrices(P, R, pi);
+[newP, newR] = policy_matrices(P, R, pi); %I don't think this line is useful
 V0 = ((1:16) - ones(1,16))';
 pol_eval_1(pi, P, R, gamma)
 pol_eval_2(500,n,V0,pi,D,M,K,h,c,pr,gamma)
@@ -62,18 +62,18 @@ toc
 %and PIbis faster than VI for the same number of iterations
 
 
-[VPI, piPI] = PIbis(P,R, gamma, 500)
-[VVI, piVI] = VI(P, R, gamma, 500)
+[V_PI, pi_PI] = PIbis(P,R, gamma, 500)
+[V_VI, pi_VI] = VI(P, R, gamma, 500)
 
 K= 50;
 errVI = zeros(1, K);
 errPI = zeros(1, K);
 
 for iter = 1:K
-    [Vvalue, piV] = VI(P, R, gamma, iter); %probable Schlemiel, starting from 0 again each time
-    errVI(iter) = max(abs(Vvalue-VVI));
-    [Vpolicy, piP] = PIbis(P,R, gamma, iter);
-    errPI(iter) = max(abs(Vpolicy - VPI));
+    [V_value, piV] = VI(P, R, gamma, iter); %probable Schlemiel, starting from 0 again each time
+    errVI(iter) = max(abs(V_value-V_VI));
+    [V_policy, piP] = PIbis(P,R, gamma, iter);
+    errPI(iter) = max(abs(V_policy - V_PI));
 end
 
 plot(1:K, errVI, 1:K, errPI);
