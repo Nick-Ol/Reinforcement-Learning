@@ -2,7 +2,7 @@
 
 \usepackage[applemac]{inputenc}
 \usepackage{latexsym}
-\usepackage{graphics}
+\usepackage{graphicx}
 \usepackage[francais]{babel}
 \usepackage{amsmath,amssymb}
 \usepackage{pstricks,pst-plot}
@@ -25,7 +25,7 @@
 
 \section{Simulated trajectories and estimation of value function}
 \hspace{-6mm}\textbf{Question 1}: At a given week, the shop owner has what he had last week, plus what he received (and this sum cannot be greater than the maximum he can stock), minus what he sold, and he cannot sell more than he has, so this difference cannot be negative.
-\\The reward at a given week is equal to: minus the fix cost of delivery, minus the cost of his command, minus maintenance cost, plus the sales.
+\\The reward at a given week is equal to: minus the fix cost of delivery (if he orders), minus the cost of his command, minus maintenance cost, plus the sales.
 
 \section{Policy evaluation}
 \hspace{-6mm}We wrote three functions:
@@ -35,7 +35,8 @@
 
 
 \section{Value iteration, policy iteration}
-Policy iteration :
+\hspace{-6mm}For real code see VI.m and PI.m files.
+\\Pseudo code for policy iteration :
 \begin{verbatim}
 start at any pi = pi_0
 for i = 1, ..., N_it
@@ -46,7 +47,7 @@ end for
 return pi
 \end{verbatim}
 %
-Value iteration:
+Pseudo code for value iteration:
 \begin{verbatim}
 start at any V = V_0
 for i = 1, ..., N_it
@@ -55,5 +56,15 @@ for i = 1, ..., N_it
 end for
 return pi(x) = arg max Q(x,a) (over a)
 \end{verbatim}
+%
+Both give $\pi^* = (10, 9, 8, 7, 0, ...., 0)^T$. So there is sort of a "threshold" : whenever stocks goes under 4 units, the owner must refill to get 10 units. Otherwise he does nothing. It is a balance between the risk of being short on product and missing sales, and the cost of maintenance + the cost of order.
+%
+\begin{figure}[!htbp]
+\centering
+\noindent\includegraphics[scale=0.6]{Convergence_VIPI.eps}
+\caption{Convergence after $k$ iterations of PI and VI algorithms}
+\end{figure}
+
+
 
 \end{document}
