@@ -30,11 +30,30 @@
 \section{Policy evaluation}
 \hspace{-6mm}We wrote three functions:
 \\- pol\_eval\_1(pi, P, R, gamma) computes V using the matricial equation $V^{\pi} = R + \gamma PV^{\pi}$, which leads to $V^{\pi} = (I - \gamma P)^{-1} R$. In these equations $R$ and $P$ are not the general 2D and 3D matrices, but the 1D and 2D matrices associated to a given policy $\pi$ = $R = R(x, \pi(x))$ and $P = P(x, y, \pi(x))$.
-\\- pol\_eval\_2(MCn,n,V0,pi,D,M,K,h,c,pr,gamma) computes an estimation of $V$ using MCn Monte-Carlo simulation for each coordinate. It is slow, converges slowly (in $\sqrt{n}$ by LLN, and does not provide an exact value of $V^{\pi}$.
+\\- pol\_eval\_2(MCn,n,V0,pi,D,M,K,h,c,pr,gamma) computes an estimation of $V$ using MCn Monte-Carlo simulation for each coordinate. It is slow, converges slowly (in $\sqrt{n}$ by LLN), and does not provide an exact value of $V^{\pi}$.
 \\- pol\_eval\_3(pi, P, R ,gamma, n\_it) compute $V^{\pi}$ using n\_it iterations of the Bellman operator. Same here, $P$ and $R$ are adapted to the peculiar policy $\pi$.
 
 
 \section{Value iteration, policy iteration}
-
+Policy iteration :
+\begin{verbatim}
+start at any pi = pi_0
+for i = 1, ..., N_it
+    evaluate V_pi
+    compute Q(x,a) = R(x,a) + gamma * sum_y P(x,y,a) V_pi (y)
+    set pi(x) =arg max Q(x,a) (over a) (improvment)
+end for
+return pi
+\end{verbatim}
+%
+Value iteration:
+\begin{verbatim}
+start at any V = V_0
+for i = 1, ..., N_it
+    compute Q(x,a) = R(x,a) + gamma * sum_y P(x,y,a) V(y)
+    set V = max Q(x,a) (over a) (improvment)
+end for
+return pi(x) = arg max Q(x,a) (over a)
+\end{verbatim}
 
 \end{document}
