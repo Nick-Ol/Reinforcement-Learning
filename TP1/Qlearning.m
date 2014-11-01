@@ -13,7 +13,7 @@ for episode = 1:n_episodes %hope you ready for the next episode
         actions = randperm(M+1);
         a = actions(1)-1; %random action        
         demands = randperm(M+1);
-        d = demands(1)-1; %random number of demands
+        d = demands(1)-1; %random demand
         nextstate = Nextstate(state,a,d,M);
         reward = Reward(state,a,d,M,K,h,c,pr); %one-step reward
         
