@@ -65,13 +65,13 @@ toc
 [V_PI, pi_PI] = PI(P,R, gamma, 500,1)
 [V_VI, pi_VI] = VI(P, R, gamma, 500)
 
-K= 50;
-errVI = zeros(1, K);
-errPI = zeros(1, K);
-errVI_p = zeros(1, K);
-errPI_p = zeros(1, K);
+maxIterPlotting= 50;
+errVI = zeros(1, maxIterPlotting);
+errPI = zeros(1, maxIterPlotting);
+errVI_p = zeros(1, maxIterPlotting);
+errPI_p = zeros(1, maxIterPlotting);
 
-for iter = 1:K
+for iter = 1:maxIterPlotting
     [V_value, piV] = VI(P, R, gamma, iter); %probable Schlemiel, starting from 0 again each time
     errVI(iter) = max(abs(V_value-V_VI));
     errVI_p(iter) = max(abs(piV-pi_VI));
@@ -80,12 +80,12 @@ for iter = 1:K
     errPI_p(iter) = max(abs(piP - pi_PI));
 end
 
-plot(1:K, errVI, 1:K, errPI);
+plot(1:maxIterPlotting, errVI, 1:maxIterPlotting, errPI)
 xlabel('iterations');
 ylabel('norm difference for V');
 legend({'Error for Value iteration', 'Error for Policy iteration'});
 
-plot(1:K, errVI_p, 1:K, errPI_p);
+plot(1:maxIterPlotting, errVI_p, 1:maxIterPlotting, errPI_p)
 xlabel('iterations');
 ylabel('norm difference for pi');
 legend({'Error for Value iteration', 'Error for Policy iteration'});
