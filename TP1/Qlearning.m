@@ -5,7 +5,7 @@ Q = zeros(M+1,M+1);
 Q_prev = ones(M+1,M+1)*inf;
 count = 0;
 
-for episode = 1:n_episodes
+for episode = 1:n_episodes %hope you ready for the next episode
     states = randperm(M+1);
     state = states(1)-1; %choose a random initial state
     
