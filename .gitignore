@@ -1,6 +1,6 @@
 # Matlab :
 *.asv
-*.eps
+
 *.m~
 
 #Tex :
