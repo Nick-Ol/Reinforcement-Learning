@@ -68,17 +68,26 @@ toc
 K= 50;
 errVI = zeros(1, K);
 errPI = zeros(1, K);
+errVI_p = zeros(1, K);
+errPI_p = zeros(1, K);
 
 for iter = 1:K
     [V_value, piV] = VI(P, R, gamma, iter); %probable Schlemiel, starting from 0 again each time
     errVI(iter) = max(abs(V_value-V_VI));
+    errVI_p(iter) = max(abs(piV-pi_VI));
     [V_policy, piP] = PI(P,R, gamma, iter, 1);
     errPI(iter) = max(abs(V_policy - V_PI));
+    errPI_p(iter) = max(abs(piP - pi_PI));
 end
 
 plot(1:K, errVI, 1:K, errPI);
 xlabel('iterations');
-ylabel('norm difference');
+ylabel('norm difference for V');
+legend({'Error for Value iteration', 'Error for Policy iteration'});
+
+plot(1:K, errVI_p, 1:K, errPI_p);
+xlabel('iterations');
+ylabel('norm difference for pi');
 legend({'Error for Value iteration', 'Error for Policy iteration'});
 %we state that the PI algorithm converges much faster than VI
 
