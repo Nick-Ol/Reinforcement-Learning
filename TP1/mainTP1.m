@@ -77,6 +77,8 @@ for iter = 1:K
 end
 
 plot(1:K, errVI, 1:K, errPI);
+xlabel('iterations');
+ylabel('norm difference');
 legend({'Error for Value iteration', 'Error for Policy iteration'});
 %we state that the PI algorithm converges much faster than VI
 
