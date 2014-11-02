@@ -1,9 +1,10 @@
-function [Q] =Qlearning(eta,n_episodes,n_it,M,K,h,c,pr,gamma)
+function [Q, nb_it] =Qlearning(eta,n_episodes,n_it,M,K,h,c,pr,gamma)
 %eta: learning rate, considered as constant
 
 Q = zeros(M+1,M+1);
 Q_prev = ones(M+1,M+1)*inf;
 count = 0;
+nb_it = 0;
 
 for episode = 1:n_episodes %hope you ready for the next episode
     states = randperm(M+1);
@@ -32,6 +33,7 @@ for episode = 1:n_episodes %hope you ready for the next episode
     end
     
     Q_prev = Q;
+    nb_it = nb_it + 1;
     
 end
         
