@@ -92,5 +92,13 @@ legend({'Error for Value iteration', 'Error for Policy iteration'});
 
 %% Q-Learning
 tic
-Qlearning(0.2, 10000, 200, M,K,h,c,pr,gamma)
+Qlearn = Qlearning(0.2, 20000, 300, M,K,h,c,pr,gamma)
 toc
+
+%Optimal policy associated :
+pi_Qlearn = zeros(M+1, 1); %column vector
+for x = 1:M+1
+    [val, indx] = max(Qlearn(x,:));
+    pi_Qlearn(x)= indx -1; %find the optimal policy
+end
+pi_Qlearn
