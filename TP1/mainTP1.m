@@ -32,7 +32,6 @@ plot(cumsum(gamma.^((1:n)-1).*R))
 
 [P,R]=MDP(D,M,K,h,c,pr);
 
-[newP, newR] = policy_matrices(P, R, pi); %I don't think this line is useful
 V0 = ((1:16) - ones(1,16))';
 pol_eval_1(pi, P, R, gamma)
 pol_eval_2(500,n,V0,pi,D,M,K,h,c,pr,gamma)
