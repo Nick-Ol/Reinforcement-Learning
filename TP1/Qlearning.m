@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 function [Q, nb_it] =Qlearning(n_episodes,n_it,M,K,h,c,pr,gamma)
 %eta: learning rate, considered as constant
+=======
+function [Q] =Qlearning(n_episodes,n_it,M,K,h,c,pr,gamma)
+>>>>>>> origin/master
 
 Q = zeros(M+1,M+1);
 Q_prev = ones(M+1,M+1)*inf;
@@ -18,7 +22,11 @@ for episode = 1:n_episodes
         nextstate = Nextstate(state,a,d,M);
         reward = Reward(state,a,d,M,K,h,c,pr); %one-step reward
         
+<<<<<<< HEAD
         Q(1+state,1+a) = (1-1/i)*Q(1+state,1+a)...
+=======
+        Q(1+state,1+a) = (1- (1/i))*Q(1+state,1+a)...
+>>>>>>> origin/master
                         + (1/i)*(reward + gamma*max(Q(1+nextstate,:)));
         state = nextstate;
     end
