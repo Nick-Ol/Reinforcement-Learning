@@ -32,7 +32,6 @@ plot(cumsum(gamma.^((1:n)-1).*R))
 
 [P,R]=MDP(D,M,K,h,c,pr);
 
-[newP, newR] = policy_matrices(P, R, pi); %I don't think this line is useful
 V0 = ((1:16) - ones(1,16))';
 pol_eval_1(pi, P, R, gamma)
 pol_eval_2(500,n,V0,pi,D,M,K,h,c,pr,gamma)
@@ -95,3 +94,11 @@ legend({'Error for Value iteration', 'Error for Policy iteration'});
 tic
 Qlearning(10000, 200, M,K,h,c,pr,gamma)
 toc
+
+%Optimal policy associated :
+pi_Qlearn = zeros(M+1, 1); %column vector
+for x = 1:M+1
+    [val, indx] = max(Qlearn(x,:));
+    pi_Qlearn(x)= indx -1; %find the optimal policy
+end
+pi_Qlearn
