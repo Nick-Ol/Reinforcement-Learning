@@ -1,4 +1,4 @@
-function [Q] =Qlearning(eta,n_episodes,n_it,M,K,h,c,pr,gamma)
+function [Q] =Qlearning(n_episodes,n_it,M,K,h,c,pr,gamma)
 %eta: learning rate, considered as constant
 
 Q = zeros(M+1,M+1);
@@ -17,8 +17,8 @@ for episode = 1:n_episodes %hope you ready for the next episode
         nextstate = Nextstate(state,a,d,M);
         reward = Reward(state,a,d,M,K,h,c,pr); %one-step reward
         
-        Q(1+state,1+a) = (1-eta)*Q(1+state,1+a)...
-                        + eta*(reward + gamma*max(Q(1+nextstate,:)));
+        Q(1+state,1+a) = (1- (1/i))*Q(1+state,1+a)...
+                        + (1/i)*(reward + gamma*max(Q(1+nextstate,:)));
         state = nextstate;
     end
     
