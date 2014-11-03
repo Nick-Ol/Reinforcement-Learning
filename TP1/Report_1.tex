@@ -42,7 +42,7 @@ We are in the case of an infinite-horizon discounted MDP. The criterion we will 
 \hspace{-6mm}We wrote three functions:
 \\- pol\_eval\_1(pi, P, R, gamma) computes V using the matricial equation $V^{\pi} = R + \gamma PV^{\pi}$, which leads to $V^{\pi} = (I - \gamma P)^{-1} R$. In these equations $R$ and $P$ are not the general 2D and 3D matrices, but the 1D and 2D matrices associated to a given policy $\pi$ : $R = R(x, \pi(x))$ and $P = P(x, y, \pi(x))$.
 \\- pol\_eval\_2(MCn,n,V0,pi,D,M,K,h,c,pr,gamma) computes an estimation of $V$ using a Monte-Carlo method (with MCn simulations) for each coordinate. It is time-consuming, converges slowly (in $\sqrt{MCn}$ by Central limit theorem), and does not provide an exact value of $V^{\pi}$.
-\\- pol\_eval\_3(pi, P, R ,gamma, n\_it) compute $V^{\pi}$ using n\_it iterations of the Bellman operator. Same here, $P$ and $R$ are adapted to the peculiar policy $\pi$.
+\\- pol\_eval\_3(pi, P, R ,gamma, n\_it) computes $V^{\pi}$ using n\_it iterations of the Bellman operator. Same here, $P$ and $R$ are adapted to the peculiar policy $\pi$.
 
 
 \section{Value iteration, policy iteration}

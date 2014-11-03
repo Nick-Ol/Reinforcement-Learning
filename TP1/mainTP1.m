@@ -92,7 +92,7 @@ legend({'Error for Value iteration', 'Error for Policy iteration'});
 
 %% Q-Learning
 tic
-Qlearn = Qlearning(0.2, 20000, 200, M,K,h,c,pr,gamma)
+[Qlearn,n_iter] = Qlearning(30000, 100, M,K,h,c,pr,gamma);
 toc
 
 %Optimal policy associated :
