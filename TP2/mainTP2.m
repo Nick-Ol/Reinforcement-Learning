@@ -56,8 +56,12 @@ regMC2 = regMC2/MCn;
 
 %% Easy Problem
 
+Arm5 = armBernoulli(0.2);
+Arm6 = armBernoulli(0.24);
+Arm7 = armBernoulli(0.55);
+MAB1 ={Arm1, Arm7, Arm5, Arm6};
 
-
+c = complexity(MAB1);
 %% Difficult problem 
 
 

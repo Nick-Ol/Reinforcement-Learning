@@ -12,7 +12,7 @@ c=0;
 
 for i = 1:NbArms
     if i~= maxIdx
-        c = c + (Means(i) - maxMean)/KL(MAB{i}.p, MAB{maxIdx}.p);
+        c = c + (maxMean - Means(i))/KL(MAB{i}.p, MAB{maxIdx}.p);
     end
 end
 end
