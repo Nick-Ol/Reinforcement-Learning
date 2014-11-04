@@ -1,10 +1,10 @@
 %% Build your own bandit problem 
 
 % this is an example, please change the parameters or arms!
-Arm1=armBernoulli(0.5);
-Arm2=armBeta(3,7);
-Arm3=armExp(3);
-Arm4=armFinite([0.1 0.3 0.7 0.8],[0.2 0.4 0.1 0.3]);
+Arm1=armBernoulli(0.4);
+Arm2=armBeta(4,6);
+Arm3=armExp(2);
+Arm4=armFinite([0.2 0.3 0.5 0.8],[0.1 0.3 0.3 0.3]);
 
 MAB={Arm1,Arm2,Arm3,Arm4};
 % bandit : set of arms
