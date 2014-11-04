@@ -90,9 +90,11 @@ We are in the case of an infinite-horizon discounted MDP. The criterion we will 
 \section{Q-Learning}
 \hspace*{-6mm}\textbf{Question 3} : \textit{See Qlearning.m}
 \\We saw in class that the sum of the learning rate needs to be divergent, while the sum of its square needs to be convergent. In order not to erase at each iteration what we have already learned, we took $\eta_i = 1/(i+10)$.
+\\Q-learning computations take around 100 s for 30,000 episodes and 200 terations.
 \\In this problem, there is no terminal state. So for each episode, we made a learning through 200 weeks (we have $\gamma^{200} = 0.018$, which is rather small).
-\\Actually, the Q-learning algorithm here is equivalent to considering an uniform discrete demand. So we can compute the optimal policy for this demand using VI or PI. We then know the policy we have to find should be : $\pi^* = (10, 9, 8, 7, 6, ...., 0)^T$ here.
-\\After 30 000 episodes, Q still doesn't reach its final form. But we find $\pi = (10, 9, 10, 7, 7, 0, 6, 0, 0, 1, 3, 1, 0, 0, 0, 0)^T$, which is not the final optimal policy, but it gets closer to it by increasing the number of episodes.
+\\Here, although we do not know $D$, we observe its realisations for the demand. So, to check our results, we can compute the optimal policy for this demand using VI or PI. We then know the policy we have to find should be : $\pi^* = (10, 9, 8, 7, 0, ...., 0)^T$ here.
+\\After 30 000 episodes, Q still doesn't reach its final form. But we find $\pi = (10, 9, 10, 7, 0, 0, 0, 6, 0, 1, 2, 1, 0, 0, 0, 0)^T$, which is not the final optimal policy, but it gets closer to it by increasing the number of episodes.
+\\The problem is that a small variation of convergence for Q can have a great impact on the policy, because the optimal policy is related to arg max of a line of $Q$, which can change significantly if $Q$ changes just a little bit.
 
 
 \end{document}
