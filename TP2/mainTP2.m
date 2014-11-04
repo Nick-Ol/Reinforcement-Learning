@@ -22,14 +22,14 @@ Means
 
 %% Comparison of the regret on one run of the bandit algorithm
 
-n=5000; % horizon
+n=100; % horizon
 
-alpha=;
+alpha=0.15;
 
 [rew1,draws1]=UCB(n,alpha,MAB);
-reg1=;
+reg1= n*max(Means) - sum(rew1);
 [rew2,draws2]=naive(n,MAB);
-reg2=;
+reg2=n*max(Means) - sum(rew2);
 
 
 plot(1:n,reg1,1:n,reg2)
