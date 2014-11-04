@@ -22,17 +22,18 @@ Means
 
 %% Comparison of the regret on one run of the bandit algorithm
 
-n=100; % horizon
+n=50000; % horizon
 
 alpha=0.15;
 
 [rew1,draws1]=UCB(n,alpha,MAB);
-reg1= n*max(Means) - sum(rew1);
+reg1= cumsum(max(Means) - rew1);
 [rew2,draws2]=naive(n,MAB);
-reg2=n*max(Means) - sum(rew2);
+reg2= cumsum(max(Means) -rew2);
 
 
 plot(1:n,reg1,1:n,reg2)
+legend('Regret for UCB', 'Regret for naive')
 
 
 %% (Expected) regret curve for UCB and the naive strategy
