@@ -18,7 +18,7 @@ end
     
 for t = (length(MAB)+1):T  
     Ba = (Sa./Na) +sqrt(alpha*log(t)./Na);
-    [val, idx] = max( Ba());
+    [val, idx] = max(Ba());
     
     reward = MAB{idx}.play();
     Sa(idx) = Sa(idx) + reward;
