@@ -24,17 +24,27 @@ Means
 
 n=5000; % horizon
 
-alpha=0.15;
+[rew_naive,draws_naive]=naive(n,MAB);
+reg_naive = cumsum(max(Means) - rew_naive);
+legendInfo{1}= 'Regret for naive';
 
-[rew1,draws1]=UCB(n,alpha,MAB);
-reg1= cumsum(max(Means) - rew1);
-[rew2,draws2]=naive(n,MAB);
-reg2= cumsum(max(Means) -rew2);
+reg_alpha = zeros(size(0:0.1:2,2),n);
+i = 1;
+for alpha = 0:0.1:2
+    [rew_ucb,draws_ucb] = UCB(n,alpha,MAB);
+    reg_alpha(i,:) = cumsum(max(Means) - rew_ucb);
+    legendInfo{i+1} = sprintf('Regret for UCB with alpha = %f', alpha);
+    
+    i = i+1;
+end
 
+hold on
+plot(1:n, reg_naive)
+plot(1:n,reg_alpha(:,1:end))
+legend(legendInfo)
 
-plot(1:n,reg1,1:n,reg2)
-legend('Regret for UCB', 'Regret for naive')
-
+%select the alpha which gives the smallest regret at horizon :
+[reg_val, reg_idx] = min(reg_alpha(:,n));
 
 %% (Expected) regret curve for UCB and the naive strategy
 MCn = 100;
@@ -42,16 +52,12 @@ regMC1= 0;
 regMC2=0;
 for simu = 1:MCn
     [rew1,draws1]=UCB(n,alpha,MAB);
-    regMC1= sum(max(Means) - rew1) +regMC1;
+    regMC1= sum(max(Means) - rew1) + regMC1;
     [rew2,draws2]=naive(n,MAB);
-    regMC2= sum(max(Means) -rew2) +regMC2;
+    regMC2= sum(max(Means) -rew2) + regMC2;
 end
 regMC1 =regMC1/MCn;
 regMC2 = regMC2/MCn;
-
-
-
-
 
 
 %% Easy Problem
