@@ -68,26 +68,26 @@ regMC_UCB = regMC_UCB/MCn;
 Arm5 = armBernoulli(0.2);
 Arm6 = armBernoulli(0.24);
 Arm7 = armBernoulli(0.55);
-MAB_ber ={Arm1, Arm7, Arm5, Arm6};
+MAB_easy ={Arm1, Arm7, Arm5, Arm6};
 
-NbArms_ber=length(MAB_ber);
+NbArms_easy=length(MAB_easy);
 
-Means_ber=zeros(1,NbArms_ber);
+Means_easy=zeros(1,NbArms_easy);
 for i=1:NbArms
-    Means_ber(i)=MAB_ber{i}.mean;
+    Means_easy(i)=MAB_easy{i}.mean;
 end
 
 n = 20000;
 
-c = complexity(MAB_ber);
-lower_bound = c*log(1:n);
+c_easy = complexity(MAB_easy);
+lower_bound_easy = c_easy*log(1:n);
 
-[rew_ber,draws_ber] = UCB(n,alpha,MAB_ber);
-reg_ber = cumsum(max(Means_ber) - rew_ber);
+[rew_easy,draws_easy] = UCB(n,alpha,MAB_easy);
+reg_easy = cumsum(max(Means_easy) - rew_easy);
 
 hold on
-plot(1:n, lower_bound)
-plot(1:n, reg_ber)
+plot(1:n, lower_bound_easy)
+plot(1:n, reg_easy)
 legend('Lower bound', 'Regret curve')
 
 
@@ -99,7 +99,46 @@ ArmDiff2 = armBernoulli(0.24);
 ArmDiff3 = armBernoulli(0.23);
 ArmDiff4 = armBernoulli(0.25);
 MAB_diff ={ArmDiff1, ArmDiff2, ArmDiff3, ArmDiff4};
-c_diff = complexity(MAB_diff); %67
+
+Means_diff=zeros(1,NbArms_ber);
+for i=1:NbArms
+    Means_diff(i)=MAB_diff{i}.mean;
+end
+
+c_diff = complexity(MAB_diff); %68
 
 %% UCB versus Thompson Sampling
+
+%"Easy" problem :
+%UCB and lower bound already computed earlier on
+n = 20000;
+
+[rew_thom_easy,draws_thom_easy] = Thompson(n,MAB_ber);
+reg_thom_easy = cumsum(max(Means_ber) - rew_thom_easy);
+
+hold on
+plot(1:n, lower_bound_easy)
+plot(1:n, reg_easy)
+plot(1:n, reg_thom_easy)
+legend('Lower bound', 'Regret curve for UCB', 'Regret curve for Thompson sampling')
+
+%"Difficult" problem :
+n = 20000;
+alpha = 0.1;
+
+c_diff = complexity(MAB_diff);
+lower_bound_diff = c_diff*log(1:n);
+
+[rew_ucb_diff,draws_ucb_diff] = UCB(n,alpha,MAB_diff);
+reg_ucb_diff = cumsum(max(Means_diff) - rew_ucb_diff);
+
+[rew_thom_diff,draws_thom_diff] = Thompson(n,MAB_diff);
+reg_thom_diff = cumsum(max(Means_diff) - rew_thom_diff);
+
+hold on
+plot(1:n, lower_bound_diff)
+plot(1:n, reg_ucb_diff)
+plot(1:n, reg_thom_diff)
+legend('Lower bound', 'Regret curve for UCB', 'Regret curve for Thompson sampling')
+
 
