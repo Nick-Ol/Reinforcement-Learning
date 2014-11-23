@@ -22,15 +22,15 @@ Means
 
 %% Comparison of the regret on one run of the bandit algorithm
 
-n=5000; % horizon
+n = 10000; % horizon
 
 [rew_naive,draws_naive]=naive(n,MAB);
 reg_naive = cumsum(max(Means) - rew_naive);
 legendInfo{1}= 'Regret for naive';
 
-reg_alpha = zeros(size(0:0.1:2,2),n);
+reg_alpha = zeros(size(0.1:0.1:2,2),n);
 i = 1;
-for alpha = 0:0.1:2
+for alpha = 0.1:0.1:2
     [rew_ucb,draws_ucb] = UCB(n,alpha,MAB);
     reg_alpha(i,:) = cumsum(max(Means) - rew_ucb);
     legendInfo{i+1} = sprintf('Regret for UCB with alpha = %f', alpha);
@@ -47,17 +47,19 @@ legend(legendInfo)
 [reg_val, reg_idx] = min(reg_alpha(:,n));
 
 %% (Expected) regret curve for UCB and the naive strategy
+alpha = 0.1;
+
 MCn = 100;
-regMC1= 0;
-regMC2=0;
+regMC_naive = 0;
+regMC_UCB =0;
 for simu = 1:MCn
-    [rew1,draws1]=UCB(n,alpha,MAB);
-    regMC1= sum(max(Means) - rew1) + regMC1;
-    [rew2,draws2]=naive(n,MAB);
-    regMC2= sum(max(Means) -rew2) + regMC2;
+    [rew_naive,draws_naive] = naive(n,MAB);
+    regMC_naive = sum(max(Means)-rew_naive) + regMC_naive;
+    [rew_UCB,draws_UCB] = UCB(n,alpha,MAB);
+    regMC_UCB = sum(max(Means)-rew_UCB) + regMC_UCB;
 end
-regMC1 =regMC1/MCn;
-regMC2 = regMC2/MCn;
+regMC_naive =regMC_naive/MCn;
+regMC_UCB = regMC_UCB/MCn;
 
 
 %% Easy Problem
