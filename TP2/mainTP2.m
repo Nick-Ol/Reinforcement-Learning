@@ -1,10 +1,10 @@
 %% Build your own bandit problem 
 
 % this is an example, please change the parameters or arms!
-Arm1=armBernoulli(0.4);
-Arm2=armBeta(4,6);
-Arm3=armExp(2);
-Arm4=armFinite([0.2 0.3 0.5 0.8],[0.1 0.3 0.3 0.3]);
+Arm1=armBernoulli(0.4); %mean 0.4
+Arm2=armBeta(4,12); %mean 0.25
+Arm3=armExp(9); %mean 0.11
+Arm4=armFinite([0.2 0.4 0.7 0.8],[0.1 0.3 0.3 0.3]); %mean 0.59
 
 MAB={Arm1,Arm2,Arm3,Arm4};
 % bandit : set of arms
@@ -28,10 +28,10 @@ n = 5000; % horizon
 reg_naive = cumsum(max(Means) - rew_naive);
 legendInfo{1}= 'Regret for naive';
 
-alpha_test = 0.1:0.2:2;
+alpha_range = logsample(.01, 1, 10);
 reg_alpha = zeros(size(alpha_test,2),n);
 i = 1;
-for alpha = alpha_test
+for alpha = alpha_range
     [rew_ucb,draws_ucb] = UCB(n,alpha,MAB);
     reg_alpha(i,:) = cumsum(max(Means) - rew_ucb);
     legendInfo{i+1} = sprintf('Regret for UCB with alpha = %f', alpha);
@@ -45,10 +45,10 @@ plot(1:n,reg_alpha(:,1:end))
 legend(legendInfo)
 
 %select the alpha which gives the smallest regret at horizon :
-[reg_val, reg_idx] = min(reg_alpha(:,n));
+[reg_alpha_val, reg_alpha_idx] = min(reg_alpha(:,n));
 
 %% (Expected) regret curve for UCB and the naive strategy
-alpha = 0.1;
+alpha = alpha_range(reg_alpha_idx);
 
 MCn = 100;
 regMC_naive = 0;
@@ -67,7 +67,7 @@ regMC_UCB = regMC_UCB/MCn;
 
 Arm5 = armBernoulli(0.2);
 Arm6 = armBernoulli(0.24);
-Arm7 = armBernoulli(0.55);
+Arm7 = armBernoulli(0.8);
 MAB_easy ={Arm1, Arm7, Arm5, Arm6};
 
 NbArms_easy=length(MAB_easy);
