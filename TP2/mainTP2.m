@@ -77,9 +77,9 @@ for i=1:NbArms
     Means_easy(i)=MAB_easy{i}.mean;
 end
 
-n = 20000;
+n = 5000;
 
-c_easy = complexity(MAB_easy);
+c_easy = complexity(MAB_easy); %2.5
 lower_bound_easy = c_easy*log(1:n);
 
 [rew_easy,draws_easy] = UCB(n,alpha,MAB_easy);
@@ -111,7 +111,6 @@ c_diff = complexity(MAB_diff); %68
 
 %"Easy" problem :
 %UCB and lower bound already computed earlier on
-n = 20000;
 
 [rew_thom_easy,draws_thom_easy] = Thompson(n,MAB_ber);
 reg_thom_easy = cumsum(max(Means_ber) - rew_thom_easy);
@@ -123,10 +122,7 @@ plot(1:n, reg_thom_easy)
 legend('Lower bound', 'Regret curve for UCB', 'Regret curve for Thompson sampling')
 
 %"Difficult" problem :
-n = 20000;
-alpha = 0.1;
-
-c_diff = complexity(MAB_diff);
+n=200000;
 lower_bound_diff = c_diff*log(1:n);
 
 [rew_ucb_diff,draws_ucb_diff] = UCB(n,alpha,MAB_diff);
