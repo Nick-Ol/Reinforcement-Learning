@@ -94,7 +94,12 @@ legend('Lower bound', 'Regret curve')
 
 %% Difficult problem 
 
-
+ArmDiff1 = armBernoulli(0.22);
+ArmDiff2 = armBernoulli(0.24);
+ArmDiff3 = armBernoulli(0.23);
+ArmDiff4 = armBernoulli(0.25);
+MAB_diff ={ArmDiff1, ArmDiff2, ArmDiff3, ArmDiff4};
+c_diff = complexity(MAB_diff); %67
 
 %% UCB versus Thompson Sampling
 
