@@ -22,15 +22,15 @@ Means
 
 %% Comparison of the regret on one run of the bandit algorithm
 
-n = 10000; % horizon
+n = 5000; % horizon
 
 [rew_naive,draws_naive]=naive(n,MAB);
 reg_naive = cumsum(max(Means) - rew_naive);
 legendInfo{1}= 'Regret for naive';
 
-reg_alpha = zeros(size(0.1:0.1:2,2),n);
+reg_alpha = zeros(size(0.1:0.2:2,2),n);
 i = 1;
-for alpha = 0.1:0.1:2
+for alpha = 0.1:0.2:2
     [rew_ucb,draws_ucb] = UCB(n,alpha,MAB);
     reg_alpha(i,:) = cumsum(max(Means) - rew_ucb);
     legendInfo{i+1} = sprintf('Regret for UCB with alpha = %f', alpha);
@@ -76,7 +76,7 @@ for i=1:NbArms
     Means_ber(i)=MAB_ber{i}.mean;
 end
 
-n = 20000
+n = 20000;
 
 c = complexity(MAB_ber);
 lower_bound = c*log(1:n);
