@@ -67,9 +67,30 @@ regMC_UCB = regMC_UCB/MCn;
 Arm5 = armBernoulli(0.2);
 Arm6 = armBernoulli(0.24);
 Arm7 = armBernoulli(0.55);
-MAB1 ={Arm1, Arm7, Arm5, Arm6};
+MAB_ber ={Arm1, Arm7, Arm5, Arm6};
 
-c = complexity(MAB1);
+NbArms_ber=length(MAB_ber);
+
+Means_ber=zeros(1,NbArms_ber);
+for i=1:NbArms
+    Means_ber(i)=MAB_ber{i}.mean;
+end
+
+n = 20000
+
+c = complexity(MAB_ber);
+lower_bound = c*log(1:n);
+
+[rew_ber,draws_ber] = UCB(n,alpha,MAB_ber);
+reg_ber = cumsum(max(Means_ber) - rew_ber);
+
+hold on
+plot(1:n, lower_bound)
+plot(1:n, reg_ber)
+legend('Lower bound', 'Regret curve')
+
+
+
 %% Difficult problem 
 
 
