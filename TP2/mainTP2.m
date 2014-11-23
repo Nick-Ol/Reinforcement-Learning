@@ -28,9 +28,10 @@ n = 5000; % horizon
 reg_naive = cumsum(max(Means) - rew_naive);
 legendInfo{1}= 'Regret for naive';
 
-reg_alpha = zeros(size(0.1:0.2:2,2),n);
+alpha_test = 0.1:0.2:2;
+reg_alpha = zeros(size(alpha_test,2),n);
 i = 1;
-for alpha = 0.1:0.2:2
+for alpha = alpha_test
     [rew_ucb,draws_ucb] = UCB(n,alpha,MAB);
     reg_alpha(i,:) = cumsum(max(Means) - rew_ucb);
     legendInfo{i+1} = sprintf('Regret for UCB with alpha = %f', alpha);
