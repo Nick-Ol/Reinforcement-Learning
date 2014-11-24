@@ -99,7 +99,8 @@ ArmDiff3 = armBernoulli(0.23);
 ArmDiff4 = armBernoulli(0.25);
 MAB_diff ={ArmDiff1, ArmDiff2, ArmDiff3, ArmDiff4};
 
-Means_diff=zeros(1,NbArms_ber);
+NbArms_diff = length(MAB_diff);
+Means_diff=zeros(1,NbArms_diff);
 for i=1:NbArms
     Means_diff(i)=MAB_diff{i}.mean;
 end
@@ -111,8 +112,8 @@ c_diff = complexity(MAB_diff); %68
 %"Easy" problem :
 %UCB and lower bound already computed earlier on
 
-[rew_thom_easy,draws_thom_easy] = Thompson(n,MAB_ber);
-reg_thom_easy = cumsum(max(Means_ber) - rew_thom_easy);
+[rew_thom_easy,draws_thom_easy] = Thompson(n,MAB_easy);
+reg_thom_easy = cumsum(max(Means_easy) - rew_thom_easy);
 
 hold on
 plot(1:n, lower_bound_easy)
