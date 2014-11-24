@@ -38,10 +38,12 @@ for alpha = alpha_range
     i = i+1;
 end
 
+figure;
 hold on
 plot(1:n, reg_naive)
 plot(1:n,reg_alpha(:,1:end))
 legend(legendInfo)
+hold off
 
 %select the alpha which gives the smallest regret at horizon :
 [reg_alpha_val, reg_alpha_idx] = min(reg_alpha(:,n));
@@ -84,10 +86,12 @@ lower_bound_easy = c_easy*log(1:n);
 [rew_easy,draws_easy] = UCB(n,alpha,MAB_easy);
 reg_easy = cumsum(max(Means_easy) - rew_easy);
 
+figure;
 hold on
 plot(1:n, lower_bound_easy)
 plot(1:n, reg_easy)
 legend('Lower bound', 'Regret curve')
+hold off
 
 
 
@@ -114,12 +118,15 @@ c_diff = complexity(MAB_diff); %68
 
 [rew_thom_easy,draws_thom_easy] = Thompson(n,MAB_easy);
 reg_thom_easy = cumsum(max(Means_easy) - rew_thom_easy);
+lower_bound_easy = c_easy*log(1:n);
 
+figure;
 hold on
 plot(1:n, lower_bound_easy)
 plot(1:n, reg_easy)
 plot(1:n, reg_thom_easy)
 legend('Lower bound', 'Regret curve for UCB', 'Regret curve for Thompson sampling')
+hold off
 
 %"Difficult" problem :
 n=200000;
@@ -131,10 +138,11 @@ reg_ucb_diff = cumsum(max(Means_diff) - rew_ucb_diff);
 [rew_thom_diff,draws_thom_diff] = Thompson(n,MAB_diff);
 reg_thom_diff = cumsum(max(Means_diff) - rew_thom_diff);
 
+figure;
 hold on
 plot(1:n, lower_bound_diff)
 plot(1:n, reg_ucb_diff)
 plot(1:n, reg_thom_diff)
 legend('Lower bound', 'Regret curve for UCB', 'Regret curve for Thompson sampling')
-
+hold off
 
