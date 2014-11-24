@@ -40,17 +40,19 @@ MAB={Arm1,Arm2,Arm3,Arm4};
 \section{The UCB algorithm}
 
 \hspace{-6mm} We implemented the naive strategy in \textit{naive.m}, simply by calling \textit{UCB.m} with parameter $\alpha = 0$.
-
+%
+\\[5mm]
 \underline{Question 1 :} We plot the regret curves for the naive strategy and the UCB algorithm for several values of $\alpha$, logarithmically sampled from .01 to 1. We chose an horizon of 5000 draws of arms. We state that the final regret seems to be smaller for smaller values of $\alpha$. We will keep for $\alpha$ the value which gives the minimum final regret on a particular draw, so here we got $\alpha = 0.0464$.
 
 \medskip
-The Monte-Carlo estimations of the final regret at horizon 5000, with 100 trajectories simulated, are approximately 94 for the naive algorithm, and 4 for the UCB algorithm with $\alpha = 0.0464$.
+The Monte-Carlo estimations of the final regret at horizon 5000, with 100 trajectories simulated, are larger for the naive algorithm (around 100) than for the UCB with $\alpha = 0.0464$ (varying around 50). 
+\\
+As the variance of the regret must be quite high, MC estimations with 100 trajectories do not give the same results every time. What makes sense here is to observe that UCB gives a lower regret than the naive algorithm, but the values themselves are just an approximation of the mean regrets.
+\\
 
-As expected, we see that the UCB algorithm gives better results (i.e. fewer regret) than the naive one.
 
-\begin{figure}[H]
-	\centering
-	\noindent\includegraphics[scale=0.4]{regret_curves.jpg}
+\hspace*{-90mm}\begin{figure}[H]
+	\hspace*{-15mm}\noindent\includegraphics[scale=0.6]{regret_curves.png}
 	\caption{Regret curves for the naive strategy and the UCB algorithm for several values of $\alpha$}
 \end{figure}
 
@@ -78,11 +80,11 @@ Here, we find effectively that the regret curve is above the lower bound. It mig
 \section{A Bayesian idea for Bernoulli bandit problems}
 
 "Optimism" consists in letting the agent play as if the environment was the most favorable among all environments that are still sufficiently likely given the observations accumulated so far.
-
-The UCB algorithm is optimistic as because we pull the arm that has the greatest value that is statistically plausible at time t.
-
+\\
+The UCB algorithm is optimistic because we pull the arm that has the greatest value that is statistically plausible at time t.
+\\
 Thompson sampling samples each action according to the probability it is optimal. So we cannot say this is an "optimistic algorithm".
-
+\\[5mm]
 \underline{Question 2 :} For the "easy" bandit problem with Bernoulli arms (the same as in section 2), here is what we find :
 
 \begin{figure}[H]
@@ -100,7 +102,7 @@ ArmDiff4 = armBernoulli(0.25);
 MAB_diff ={ArmDiff1, ArmDiff2, ArmDiff3, ArmDiff4};
 \end{verbatim}
 
-We now have a complexity much larger : $c = 67.7$.
+We now have a much larger complexity : $c = 67.7$.
 Below is the plot we obtained :
 \begin{figure}[H]
 	\centering
