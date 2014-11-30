@@ -96,6 +96,7 @@ end
 Reg1=Reg1/N;
 Reg2=Reg2/N;
 
+figure;
 plot(1:n,Reg1,1:n,Reg2)
 legend('Thompson Sampling', 'EXP3')
 
