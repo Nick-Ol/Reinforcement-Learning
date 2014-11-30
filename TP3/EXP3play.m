@@ -6,6 +6,6 @@ Exp3 = EXP3(eta, beta, size(G,1));
 
 for i = 1:n
     Actions(i) = Exp3.play();
-    Exp3.getReward(G(Actions(i),Seq(i)));
     Rewards(i) = G(Actions(i), Seq(i));
+    Exp3.getReward(Rewards(i));
 end
