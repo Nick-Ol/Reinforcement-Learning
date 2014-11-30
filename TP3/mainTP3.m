@@ -16,7 +16,7 @@ for i = 1:n
     end    
 end
 
-eta = sqrt(size(G,1)*log(size(G,1))/((exp(1)-1)*n));
+eta = sqrt(size(G,1)*log(size(G,1))/((exp(1)-1)*n)); %course's formula
 %eta = 0.5;
 beta = eta;
 [ActionsEWF, RewardsEWF] = EWFplay(n,G,eta,Seq);
@@ -40,9 +40,25 @@ hold off
 
 
 %% EXP 3 versus EXP 3 : nash equilibrium
+[ActionsA,ActionsB,Rew]= EXP3vEXP3(n,eta,beta,G);
 
+Pa = cumsum(ActionsA==1)./(1:n);
+Pb = cumsum(ActionsB==1)./(1:n);
 
+figure;
+hold on
+plot(1:n, Pa)
+plot(1:n, Pb)
+legend('Empirical probability that A choses 1', 'Empirical probability that B choses 1')
+hold off
 
+RewA = cumsum(Rew)./(1:n);
+
+figure;
+hold on
+plot(1:n, RewA)
+legend('Empirical mean of the rewards obtained by A')
+hold off
 
 %% EXP3 versus Thompson Sampling
 
