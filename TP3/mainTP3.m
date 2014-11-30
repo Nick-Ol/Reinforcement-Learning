@@ -1,14 +1,41 @@
 %% Adversarial Problem setting 
 
-G = [2 -1  ; 0  1] % gain matrix for player A
+G = [2 -1  ; 0  1]; % gain matrix for player A
 n=500; % horizon 
 
 
 %% Oblivious adversary (EWF and EXP3)
 
 % Define the Sequence of Player B
-Seq = 
+Seq = zeros(1,n);
+for i = 1:n
+    if (mod(i,3) == 0)
+        Seq(i) = 1;
+    else
+        Seq(i) =2;
+    end    
+end
 
+eta = sqrt(size(G,1)*log(size(G,1))/((exp(1)-1)*n));
+%eta = 0.5;
+beta = eta;
+[ActionsEWF, RewardsEWF] = EWFplay(n,G,eta,Seq);
+[ActionsEXP3, RewardsEXP3] = EXP3play(n,G,eta,beta,Seq);
+
+maxRewards = zeros(1,n);
+for i = 1:n
+    maxRewards(i) = max(G(:,Seq(i)));
+end
+
+regretEWF = cumsum(maxRewards - RewardsEWF);
+regretEXP3 = cumsum(maxRewards - RewardsEXP3);
+
+figure;
+hold on
+plot(1:n, regretEWF)
+plot(1:n, regretEXP3)
+legend('Regret for EWF strategy', 'Regret for Exp3 strategy')
+hold off
 
 
 
