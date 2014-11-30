@@ -100,7 +100,43 @@ figure;
 plot(1:n,Reg1,1:n,Reg2)
 legend('Thompson Sampling', 'EXP3')
 
-    
+%% an other MAB :
+Arm4=armBernoulli(0.39);
+Arm5=armBernoulli(0.4);
+
+MAB2={Arm4,Arm5};
+
+Means2=[Arm4.mean Arm5.mean];
+mumax2=max(Means2);
+
+eta=0.01;
+beta=0.1;
+
+N=500;
+n=1000;
+
+% Estimated cumulated regret up to time n
+
+Reg1=zeros(1,n);
+Reg2=zeros(1,n);
+
+compt2=0;
+
+for i=1:N
+    [~,rew1]= Thompson(n,MAB2);
+    % complete EXP3stochastic 
+    [~,rew2]= EXP3stochastic(n,beta,eta,MAB2);
+    Reg1=Reg1 + (1:n)*mumax2 - cumsum(rew1);
+    Reg2=Reg2 + (1:n)*mumax2 - cumsum(rew2);
+    compt2=compt2+1
+end
+
+Reg1=Reg1/N;
+Reg2=Reg2/N;
+
+figure;
+plot(1:n,Reg1,1:n,Reg2)
+legend('Thompson Sampling', 'EXP3')
     
     
     
