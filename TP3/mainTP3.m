@@ -71,11 +71,11 @@ MAB={Arm1,Arm2,Arm3};
 Means=[Arm1.mean Arm2.mean Arm3.mean];
 mumax=max(Means);
 
-eta=0.01;
-beta=0.1;
-
 N=500;
 n=1000;
+
+eta=sqrt(length(MAB)*log(length(MAB))/((exp(1)-1)*n));
+beta = eta;
 
 % Estimated cumulated regret up to time n
 
@@ -109,11 +109,11 @@ MAB2={Arm4,Arm5};
 Means2=[Arm4.mean Arm5.mean];
 mumax2=max(Means2);
 
-eta=0.01;
-beta=0.1;
-
 N=500;
 n=1000;
+
+eta=sqrt(length(MAB)*log(length(MAB))/((exp(1)-1)*n));
+beta = eta;
 
 % Estimated cumulated regret up to time n
 
@@ -137,8 +137,4 @@ Reg2=Reg2/N;
 figure;
 plot(1:n,Reg1,1:n,Reg2)
 legend('Thompson Sampling', 'EXP3')
-    
-    
-    
-    
-
+ 
