@@ -17,7 +17,6 @@ for i = 1:n
 end
 
 eta = sqrt(size(G,1)*log(size(G,1))/((exp(1)-1)*n)); %course's formula
-%eta = 0.5;
 beta = eta;
 [ActionsEWF, RewardsEWF] = EWFplay(n,G,eta,Seq);
 [ActionsEXP3, RewardsEXP3] = EXP3play(n,G,eta,beta,Seq);
@@ -40,7 +39,8 @@ hold off
 
 
 %% EXP 3 versus EXP 3 : nash equilibrium
-%eta = 0.5;
+%uncomment the following for question 2
+%eta = 0.2;
 %beta = eta;
 
 [ActionsA,ActionsB,Rew]= EXP3vEXP3(n,eta,beta,G);
