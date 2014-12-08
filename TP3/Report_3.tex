@@ -30,7 +30,7 @@
 
 \begin{figure}[H]
 \centering
-\noindent\includegraphics[scale=0.7]{Q1-regrets.png}
+\noindent\includegraphics[scale=0.6]{Q1-regrets.png}
 \caption{Regrets for EXP3 and EWF strategy}
 \end{figure}
 
@@ -41,17 +41,43 @@
 
 \begin{figure}[H]
 \centering
-\noindent\includegraphics[scale=0.7]{Q2-probas.png}
+\noindent\includegraphics[scale=0.6]{Q2-probas.png}
 \caption{Convergence of empirical probabilities at horizon 500}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\noindent\includegraphics[scale=0.7]{Q2-rewards.png}
+\noindent\includegraphics[scale=0.6]{Q2-rewards.png}
 \caption{Convergence of the mean reward for player A}
 \end{figure}
 
-Even if the horizon may be not enough large, we see on Figure 2 that the probabilities seem to converge towards the Nash equilibrium $(p_a^*, p_b^*)$. Furthermore, we see more easily on the graph that the empirical mean for player A converges towards the value of the game, which is around 0,4.
+Even if the horizon may be not enough large, we see on Figure 2 that the probabilities seem to converge towards the Nash equilibrium $(p_a^*, p_b^*)$. Furthermore, we see more easily on the graph that the empirical mean for player A converges towards the value of the game, which is around 0,4.\\
+
+If we increase $\eta$, we state that the convergence is faster, but the equilibrium changes. For example, for $\eta=\beta=5$ A would always chose 2 from a certain point, and B 1.
+
+\begin{figure}[H]
+	\centering
+	\noindent\includegraphics[scale=0.6]{Q2-probas-eta05.png}
+	\caption{Convergence of empirical probabilities at horizon 500 for $\eta=\beta=0,5$}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\noindent\includegraphics[scale=0.6]{Q2-rewards-eta05.png}
+	\caption{Convergence of the mean reward for player A for $\eta=\beta=0,5$}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\noindent\includegraphics[scale=0.6]{Q2-probas-eta5.png}
+	\caption{Convergence of empirical probabilities at horizon 500 for $\eta=\beta=5$}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\noindent\includegraphics[scale=0.6]{Q2-rewards-eta5.png}
+	\caption{Convergence of the mean reward for player A for $\eta=\beta=5$}
+\end{figure}
 
 \section{Stochastic bandit or adversarial bandit ?}
 
@@ -87,8 +113,7 @@ And here is what we obtained :
 	\caption{Regret curves for Thompson Sampling and Exp3 strategies on another problem}
 \end{figure}
 
-Here, at horizon 500, Exp3 has done a little better than Thompson Sampling.
-
+Here, at horizon 500, there is not a large difference between Exp3 and Thompson Sampling.
 
 
 \end{document}
