@@ -40,6 +40,9 @@ hold off
 
 
 %% EXP 3 versus EXP 3 : nash equilibrium
+%eta = 0.5;
+%beta = eta;
+
 [ActionsA,ActionsB,Rew]= EXP3vEXP3(n,eta,beta,G);
 
 Pa = cumsum(ActionsA==1)./(1:n);
@@ -112,7 +115,7 @@ mumax2=max(Means2);
 N=500;
 n=1000;
 
-eta=sqrt(length(MAB)*log(length(MAB))/((exp(1)-1)*n));
+eta=sqrt(length(MAB2)*log(length(MAB2))/((exp(1)-1)*n));
 beta = eta;
 
 % Estimated cumulated regret up to time n
