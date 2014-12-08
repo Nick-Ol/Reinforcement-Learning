@@ -23,7 +23,7 @@
 
 
 \section{EWF and EXP3 versus an oblivious adversary}
-\underline{Question 1:} We choose as a sequence for $B$ : $(1, 2, 2, 1, 2, 2, 1, \ldots)$ 
+\underline{Question 1:} We choose arbitrarily as a sequence for $B$ : $(2, 2, 1, 2, 2, 1, 2, 2, 1\ldots)$ 
 \\[3mm]We take $\eta = \sqrt{\frac{N \mathrm{log} N}{n(e-1)}}$ (formula from the class, here $N = 2$) and $\eta = 0.04$. For EXP3 we also take $\beta = \eta$.
 \\We get the following regret curves :
 
@@ -37,7 +37,7 @@
 
 
 \section{EXP3 versus EXP3 : Nash Equilibrium}
-\textbf{2):} 
+\underline{Question 2 :}
 
 \begin{figure}[H]
 \centering
@@ -45,16 +45,49 @@
 \caption{Convergence of empirical probabilities at horizon 500}
 \end{figure}
 
-\underline{Question 2}
-
 \begin{figure}[H]
 \centering
 \noindent\includegraphics[scale=0.7]{Q2-rewards.png}
 \caption{Convergence of the mean reward for player A}
 \end{figure}
 
+Even if the horizon may be not enough large, we see on Figure 2 that the probabilities seem to converge towards the Nash equilibrium $(p_a^*, p_b^*)$. Furthermore, we see more easily on the graph that the empirical mean for player A converges towards the value of the game, which is around 0,4.
 
+\section{Stochastic bandit or adversarial bandit ?}
 
+The original problem is the following :
+\begin{verbatim}
+Arm1=armBernoulli(0.2);
+Arm2=armBernoulli(0.4);
+Arm3=armBernoulli(0.5);
+
+MAB={Arm1,Arm2,Arm3};
+\end{verbatim}
+
+We obtain these regret curves :
+
+\begin{figure}[H]
+	\centering
+	\noindent\includegraphics[scale=0.7]{Q3-regrets-originalpb.png}
+	\caption{Regret curves for Thompson Sampling and Exp3 strategies on original problem}
+\end{figure}
+
+We see that Thompson Sampling does much better than Exp3 strategy.
+\\
+We computed it for another problem, with only two arms with really closed means :
+\begin{verbatim}
+Arm4=armBernoulli(0.39);
+Arm5=armBernoulli(0.4);
+\end{verbatim}
+
+And here is what we obtained :
+\begin{figure}[H]
+	\centering
+	\noindent\includegraphics[scale=0.7]{Q3-regrets-mypb.png}
+	\caption{Regret curves for Thompson Sampling and Exp3 strategies on another problem}
+\end{figure}
+
+Here, at horizon 500, Exp3 has done a little better than Thompson Sampling.
 
 
 
