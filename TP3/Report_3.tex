@@ -18,20 +18,17 @@
  
 \maketitle
 
-\section{Full information, partial information}
-\hspace{-6mm}\textbf{1):} It is a problem with full information since $R_A$ is known by $A$. A problem with partial information would be %TODO
-
 
 \section{EWF and EXP3 versus an oblivious adversary}
-\underline{Question 1:} We choose arbitrarily as a sequence for $B$ : $(2, 2, 1, 2, 2, 1, 2, 2, 1\ldots)$ 
-\\[3mm]We take $\eta = \sqrt{\frac{N \mathrm{log} N}{n(e-1)}}$ (formula from the class, here $N = 2$) and $\eta = 0.04$. For EXP3 we also take $\beta = \eta$.
+\underline{Question 1:} We choose arbitrarily as a sequence of actions for $B$ : $(2, 2, 1, 2, 2, 1, 2, 2, 1\ldots)$ 
+\\[3mm]We take $\eta = \sqrt{\frac{N \mathrm{log} N}{n(e-1)}}$ (formula from the class, here $N = 2, n = 500$, which gives $\eta = 0.04$). For EXP3 we also take $\beta = \eta$ (see slide 57 of Lecture 4 "The multi armed bandit problem" : then the regret is upper bounded above by $O(\sqrt{nN\mathrm{log} N})$).
 \\We get the following regret curves :
 
 
 \begin{figure}[H]
-\centering
-\noindent\includegraphics[scale=0.6]{Q1-regrets.png}
-\caption{Regrets for EXP3 and EWF strategy}
+	\centering
+	\noindent\includegraphics[scale=0.6]{Q1-regrets.png}
+	\caption{Regrets for EXP3 and EWF strategy}
 \end{figure}
 
 
@@ -40,43 +37,41 @@
 \underline{Question 2 :}
 
 \begin{figure}[H]
-\centering
-\noindent\includegraphics[scale=0.6]{Q2-probas.png}
-\caption{Convergence of empirical probabilities at horizon 500}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\noindent\includegraphics[scale=0.6]{Q2-rewards.png}
-\caption{Convergence of the mean reward for player A}
-\end{figure}
-
-Even if the horizon may be not enough large, we see on Figure 2 that the probabilities seem to converge towards the Nash equilibrium $(p_a^*, p_b^*)$. Furthermore, we see more easily on the graph that the empirical mean for player A converges towards the value of the game, which is around 0,4.\\
-
-If we increase $\eta$, we state that the convergence is faster, but the equilibrium changes. For example, for $\eta=\beta=5$ A would always chose 2 from a certain point, and B 1.
-
-\begin{figure}[H]
 	\centering
-	\noindent\includegraphics[scale=0.6]{Q2-probas-eta05.png}
-	\caption{Convergence of empirical probabilities at horizon 500 for $\eta=\beta=0,5$}
+	\noindent\includegraphics[scale=0.5]{Q2-probas_1000.png}
+	\caption{Convergence of empirical probabilities at horizon 1000}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\noindent\includegraphics[scale=0.6]{Q2-rewards-eta05.png}
-	\caption{Convergence of the mean reward for player A for $\eta=\beta=0,5$}
+	\noindent\includegraphics[scale=0.5]{Q2-rewards_1000.png}
+	\caption{Convergence of the mean reward for player A}
+\end{figure}
+
+We did not see convergence with horizon 500, so we extended it to 1000. We see on Figure 2 that the probabilities seem to converge towards the Nash equilibrium $(p_a^*, p_b^*)$. Furthermore, we see more easily on the graph that the empirical mean for player A converges towards the value of the game, which is around 0,5.\\
+\\[5mm]If we change $\eta$, (keeping $\eta = \beta$) we still see convergence to the same mean reward, but the probabilities are not the same for $\eta = 0.001$. Actually this is not a good choice of $\eta$, since we saw that when the algorithm was run several times with it, the results changed.
+\begin{figure}[H]
+	\centering
+	\noindent\includegraphics[scale=0.5]{Q2-probas-eta0001.png}
+	\caption{Convergence of empirical probabilities at horizon 500 for $\eta=\beta=0.001$}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\noindent\includegraphics[scale=0.6]{Q2-probas-eta5.png}
-	\caption{Convergence of empirical probabilities at horizon 500 for $\eta=\beta=5$}
+	\noindent\includegraphics[scale=0.5]{Q2-rewards-eta0001.png}
+	\caption{Convergence of the mean reward for player A for $\eta=\beta=0.001$}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\noindent\includegraphics[scale=0.6]{Q2-rewards-eta5.png}
-	\caption{Convergence of the mean reward for player A for $\eta=\beta=5$}
+	\noindent\includegraphics[scale=0.5]{Q2-probas-eta02.png}
+	\caption{Convergence of empirical probabilities at horizon 500 for $\eta=\beta=0.2$}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\noindent\includegraphics[scale=0.5]{Q2-rewards-eta02.png}
+	\caption{Convergence of the mean reward for player A for $\eta=\beta=0.2$}
 \end{figure}
 
 \section{Stochastic bandit or adversarial bandit ?}
@@ -94,7 +89,7 @@ We obtain these regret curves :
 
 \begin{figure}[H]
 	\centering
-	\noindent\includegraphics[scale=0.7]{Q3-regrets-originalpb.png}
+	\noindent\includegraphics[scale=0.6]{Q3-regrets-originalpb.png}
 	\caption{Regret curves for Thompson Sampling and Exp3 strategies on original problem}
 \end{figure}
 
@@ -109,7 +104,7 @@ Arm5=armBernoulli(0.4);
 And here is what we obtained :
 \begin{figure}[H]
 	\centering
-	\noindent\includegraphics[scale=0.7]{Q3-regrets-mypb.png}
+	\noindent\includegraphics[scale=0.6]{Q3-regrets-mypb.png}
 	\caption{Regret curves for Thompson Sampling and Exp3 strategies on another problem}
 \end{figure}
 
