@@ -1,4 +1,4 @@
-function [ Q ] = fittedQ( k,n, gamma, maxIter )
+function [ Q, alphaNew ] = fittedQ( k,n, gamma, maxIter )
 %k: number of features
 alphaOld = zeros(k, 1);
 alphaNew = ones(k, 1);
