@@ -1,7 +1,7 @@
-function [ Q, alphaNew ] = fittedQ( k,n, gamma, maxIter )
+function [ Q, alphaNew ] = fittedQ( k, n, gamma, maxIter )
 %k: number of features
 alphaOld = zeros(k, 1);
-alphaNew = ones(k, 1);
+alphaNew = rand(1,k)';
 thetas = rand_featureQ(k);
 iter = 0;
 
@@ -21,11 +21,14 @@ while(iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01 )
         for j = 1:k
             X(i, j) = phiQ(s, a, thetas(j, :));
         end
-    end  
+    end
     %update alpha
     alphaOld = alphaNew;
     alphaNew = inv(X'*X)*X'*Z;
+    %alphaNew = (X'*X)\(X'*Z);
 end
+
 Q = createQ(alphaNew, thetas);
+
 end
 
