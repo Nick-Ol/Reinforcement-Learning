@@ -12,12 +12,18 @@ gamma=0.8;
 alpha=ones(1,d);
 Q=createQ(alpha,thetasQ);
 V = @(s) Q(s,0);
-plotf(V) 
+figure(1);
+plotf(V)
 
 %% Fitted Q
-[Q_fitted, alpha_fitted] = fittedQ(d, 10, gamma, 100);
-V_fitted = @(s) Q_fitted(s,0);
-plotf(V_fitted) 
+[Q_fitted, alpha_fitted] = fittedQ(d, 100, gamma, 100);
+V_fitted = @(s) max(arrayfun(@(a)Q_fitted(s,a),[-1,0,1]));
+figure(2);
+plotf(V_fitted)
 
-
+%% LSTD
+[Q_lstd, alpha_lstd] = LSTD(d, 100, thetasQ, 100);
+V_fitted = @(s) max(arrayfun(@(a)Q_lstd(s,a),[-1,0,1]));
+figure(3);
+plotf(V_lstd)
 
