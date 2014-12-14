@@ -1,11 +1,16 @@
 function [ Q, alpha ] = LSTD( k, lenTraj, thetas, maxIter )
 
-for iter = 1:maxIter %TODO change this to a while loop with stopping criterion
+iter = 0;
+alphaOld = zeros(k, 1);
+alpha = ones(k,1);
+
+while (iter < maxIter && max(abs(alpha - alphaOld)) > 0.01 )
+    iter = iter + 1
     %generate one trajectory
     r = zeros(1, lenTraj); %rewards
     S = zeros(lenTraj, 2); % state matrix
     S(1, 1) = randi([-120, 60])/100; %x
-    S(1, 2) = randi(-70, 70)/1000; %v
+    S(1, 2) = randi([-70, 70])/1000; %v
     
     for t = 1:lenTraj
         if iter == 1 %pick random action
@@ -20,7 +25,7 @@ for iter = 1:maxIter %TODO change this to a while loop with stopping criterion
     Phi = zeros(k, lenTraj);
     for i = 1:k
         for t = 1:lenTraj
-            Phi(i, t) = phiQ(S(t, 1), pi(t), thetas(i));
+            Phi(i, t) = phiQ(S(t, :), pi(t), thetas(i)); %error : pi not defined
         end
     end
 
@@ -35,6 +40,7 @@ for iter = 1:maxIter %TODO change this to a while loop with stopping criterion
             end
         end
     end
+    alphaOld = alpha;
     alpha = b\A;
     Q = createQ(alpha, thetas);
 end
