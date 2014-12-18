@@ -1,31 +1,37 @@
-function [ Q, alpha ] = LSTD( k, lenTraj, thetas, maxIter )
+function [ Q, alphaNew ] = LSTD( k, lenTraj, gamma, thetasQ, maxIter )
 
 iter = 0;
 alphaOld = zeros(k, 1);
-alpha = ones(k,1);
+alphaNew = rand(1,k)';
+Q = createQ(alphaNew, thetasQ);
 
-while (iter < maxIter && max(abs(alpha - alphaOld)) > 0.01 )
+while (iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01 )
     iter = iter + 1
     %generate one trajectory
     r = zeros(1, lenTraj); %rewards
     S = zeros(lenTraj, 2); % state matrix
+    pi = zeros(1, lenTraj); %actions chosen
     S(1, 1) = randi([-120, 60])/100; %x
     S(1, 2) = randi([-70, 70])/1000; %v
     
-    for t = 1:lenTraj
+    for t = 1:lenTraj-1
         if iter == 1 %pick random action
-            [S(t+1, :), r(t+1)] = simulator(S(t, :), randi([-1, 1]));
+            pi(t) = randi([-1, 1]);
+            [S(t+1, :), r(t+1)] = simulator(S(t, :), pi(t));
         else %loop has already been looped over once, and Q is defined
-            [val, idx] = min([Q(S(t, :), -1), Q(S(t, :), 0), Q(S(t, :), 1)]); %idx = 1, 2 or 3
-            [S(t+1, :), r(t+1)] = simulator(S(t, :), idx - 2);  
+            [val, idx] = max([Q(S(t, :), -1), Q(S(t, :), 0), Q(S(t, :), 1)]); %idx = 1, 2 or 3
+            pi(t) = idx - 2;
+            [S(t+1, :), r(t+1)] = simulator(S(t, :), pi(t));  
         end
     end
+    [valLast, idxLast] = max([Q(S(lenTraj, :), -1), Q(S(lenTraj, :), 0), Q(S(lenTraj, :), 1)]); %idx = 1, 2 or 3
+    pi(lenTraj) = idxLast - 2;
 
     %compute all phi_i(X_t, A_t)
     Phi = zeros(k, lenTraj);
     for i = 1:k
         for t = 1:lenTraj
-            Phi(i, t) = phiQ(S(t, :), pi(t), thetas(i)); %error : pi not defined
+            Phi(i, t) = phiQ(S(t, :), pi(t), thetasQ(i,:));
         end
     end
 
@@ -33,16 +39,17 @@ while (iter < maxIter && max(abs(alpha - alphaOld)) > 0.01 )
     A = zeros(k, k);
     b = zeros(k, 1);
     for i = 1:k
-        b(i) = 1/n*sum(r.*Phi(i,  :));
+        b(i) = 1/lenTraj*sum(r.*Phi(i,  :));
         for j = 1:k
             for t = 1:lenTraj - 1
                 A(i, j) = A(i, j) + Phi(i, t).*(Phi(j, t) + gamma*Phi(j, t+1)); 
             end
         end
     end
-    alphaOld = alpha;
-    alpha = b\A;
-    Q = createQ(alpha, thetas);
+    alphaOld = alphaNew;
+    alphaNew = A\b;
+    %alphaNew = inv(A)*b;
+    Q = createQ(alphaNew, thetasQ);
 end
 end
 
