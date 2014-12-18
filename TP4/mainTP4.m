@@ -16,7 +16,7 @@ figure(1);
 plotf(V)
 
 %% Fitted Q
-[Q_fitted, alpha_fitted] = fittedQ(d, 100, gamma, 100);
+[Q_fitted, alpha_fitted] = fittedQ(d, 100, gamma, thetasQ, 1000);
 V_fitted = @(s) max(arrayfun(@(a)Q_fitted(s,a),[-1,0,1]));
 figure(2);
 plotf(V_fitted)

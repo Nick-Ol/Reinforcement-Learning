@@ -1,8 +1,8 @@
-function [ Q, alphaNew ] = fittedQ( k, n, gamma, maxIter )
+function [ Q, alphaNew ] = fittedQ( k, n, gamma, thetasQ, maxIter )
 %k: number of features
 alphaOld = zeros(k, 1);
 alphaNew = rand(1,k)';
-thetas = rand_featureQ(k);
+Q = createQ(alphaNew, thetasQ);
 iter = 0;
 
 while(iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01 )
@@ -15,11 +15,10 @@ while(iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01 )
         s(2) = randi([-7, 7])/100;
         a = randi([-1,1]);
         [y, r] = simulator(s, a);
-        Q = createQ(alphaNew, thetas);
         Z(i) = r + gamma*max([Q(y, -1), Q(y, 0), Q(y, 1)]);
         %filling line number i
         for j = 1:k
-            X(i, j) = phiQ(s, a, thetas(j, :));
+            X(i, j) = phiQ(s, a, thetasQ(j, :));
         end
     end
     %update alpha
@@ -28,7 +27,8 @@ while(iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01 )
     %alphaNew = (X'*X)\(X'*Z);
 end
 
-Q = createQ(alphaNew, thetas);
+%update Q
+Q = createQ(alphaNew, thetasQ);
 
 end
 
