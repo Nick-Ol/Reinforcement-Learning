@@ -44,6 +44,7 @@ while (iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01)
             for t = 1:lenTraj - 1
                 A(i, j) = A(i, j) + Phi(i, t).*(Phi(j, t) - gamma*Phi(j, t+1)); 
             end
+            A(i, j) = A(i, j)/lenTraj;
         end
     end
     alphaOld = alphaNew;
