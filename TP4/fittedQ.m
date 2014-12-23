@@ -1,7 +1,7 @@
 function [ Q, alphaNew ] = fittedQ( k, n, gamma, thetasQ, maxIter, isDeterministic )
 % k: number of features
 alphaOld = ones(k, 1);
-alphaNew = -rand(1,k)';
+alphaNew = -rand(1,k)'/10;
 Q = createQ(alphaNew, thetasQ);
 iter = 0;
 

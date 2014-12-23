@@ -2,7 +2,7 @@ function [ Q, alphaNew ] = LSTD( k, lenTraj, gamma, thetasQ, maxIter, isDetermin
 
 iter = 0;
 alphaOld = zeros(k, 1);
-alphaNew = rand(1,k)';
+alphaNew = rand(1,k)'/10;
 Q = createQ(alphaNew, thetasQ);
 
 while (iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.001)
