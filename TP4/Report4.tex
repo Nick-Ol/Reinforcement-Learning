@@ -31,12 +31,15 @@ In the deterministic case ($\epsilon = 0$), with 20 features, and 5000 draws at 
 
 \begin{figure}[H]
 	\centering
-	\noindent\includegraphics[scale=0.4]{fittedQ-5ep-5000draws-deterministic.png}
-	\noindent\includegraphics[scale=0.4]{fittedQ-5ep-5000draws-deterministic-levels.png}
+	\noindent\includegraphics[scale=0.3]{fittedQ-5ep-5000draws-deterministic.png}
+	\noindent\includegraphics[scale=0.3]{fittedQ-5ep-5000draws-deterministic-levels.png}
 	\caption{Left: Approximated optimal value function with fitted-Q for 20 features, 5000 draws 100 times, in the deterministic case, in 3D - Right : Level values}
 \end{figure}
 
-If we take only 10 features, we get
+As expected, we see that the approximation is less precise.
+
+If we take only 10 features, we get :
+
 \begin{figure}[H]
 	\centering
 	\noindent\includegraphics[scale=0.3]{fittedQ-10feat-determ.png}
@@ -44,7 +47,7 @@ If we take only 10 features, we get
 	\caption{Left: Approximated optimal value function with fitted-Q for 10 features, in the deterministic case, in 3D - Right : Level values}
 \end{figure}
 
-Whereas when increasing to 30 features, we get, we get
+Whereas when increasing to 30 features, we get :
 \begin{figure}[H]
 	\centering
 	\noindent\includegraphics[scale=0.3]{fittedQ-30feat-determ.png}
@@ -52,5 +55,16 @@ Whereas when increasing to 30 features, we get, we get
 	\caption{Left: Approximated optimal value function with fitted-Q for 30 features, in the deterministic case, in 3D - Right : Level values}
 \end{figure}
 
+And in the deterministic case, with 20 features, we obtain :
+\begin{figure}[H]
+	\centering
+	\noindent\includegraphics[scale=0.3]{fittedQ-5ep-5000draws-stochastic.png}
+	\noindent\includegraphics[scale=0.3]{fittedQ-5ep-5000draws-stochastic-levels.png}
+	\caption{Left: Approximated optimal value function with fitted-Q for 20 features, in the stochastic case, in 3D - Right : Level values}
+\end{figure}
+
+In general, we see high values in the right side where we have reached the terminal state, at the middle with high speed in one or another direction which means that we are going to gain enough momentum, and at the top of the opposite mountain on the left.
+
+\section{Approximate Policy Iteration : LSTD}
 
 \end{document} 
