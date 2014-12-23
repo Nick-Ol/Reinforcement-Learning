@@ -1,11 +1,11 @@
 function [ Q, alphaNew ] = fittedQ( k, n, gamma, thetasQ, maxIter )
 % k: number of features
-alphaOld = zeros(k, 1);
-alphaNew = rand(1,k)';
+alphaOld = ones(k, 1);
+alphaNew = -rand(1,k)';
 Q = createQ(alphaNew, thetasQ);
 iter = 0;
 
-while(iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01)
+while(iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.001)
     iter = iter + 1
     Z = zeros(n, 1);
     X = zeros(n, k); % n observations, k features
