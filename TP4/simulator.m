@@ -1,11 +1,16 @@
 function [ sn,rec ] = simulator( s,a )
 
-xn = max(min(s(1) + s(2), 0.6), -1.2);
-if xn == -1.2
-    vn = 0;
+x = s(1);
+v = s(2);
+
+xn = max(min(x + v, 0.6), -1.2);
+epsilon = 0; % deterministic case
+%epsilon = -0.0005 + 0.0014 * rand(1);
+
+if xn == -1.2 % speed set to zero
+    vn = max(min(epsilon + 0.001*a -0.0025*cos(3*x), 0.07), 0);
 else
-    epsilon = randi([-50, 90])/100000;
-    vn = max(min(s(2) + epsilon + 0.001*a -0.0025*cos(3*s(1)), 0.07), -0.07);
+    vn = max(min(v + epsilon + 0.001*a -0.0025*cos(3*x), 0.07), -0.07);
 end
 
 sn = [xn, vn];
