@@ -1,4 +1,4 @@
-function [ Q, alphaNew ] = LSTD( k, lenTraj, gamma, thetasQ, maxIter )
+function [ Q, alphaNew ] = LSTD( k, lenTraj, gamma, thetasQ, maxIter, isDeterministic )
 
 iter = 0;
 alphaOld = zeros(k, 1);
@@ -17,11 +17,11 @@ while (iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.001)
     for t = 1:lenTraj-1
         if iter == 1 % pick random action
             pi(t) = randi([-1, 1]);
-            [S(t+1, :), r(t+1)] = simulator(S(t, :), pi(t));
+            [S(t+1, :), r(t+1)] = simulator(S(t, :), pi(t), isDeterministic);
         else % loop has already been looped over once, and Q is defined
             [val, idx] = max([Q(S(t, :), -1), Q(S(t, :), 0), Q(S(t, :), 1)]); %idx = 1, 2 or 3
             pi(t) = idx - 2;
-            [S(t+1, :), r(t+1)] = simulator(S(t, :), pi(t));  
+            [S(t+1, :), r(t+1)] = simulator(S(t, :), pi(t), isDeterministic);  
         end
     end
     [valLast, idxLast] = max([Q(S(lenTraj, :), -1), Q(S(lenTraj, :), 0), Q(S(lenTraj, :), 1)]); %idx = 1, 2 or 3

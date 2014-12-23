@@ -1,4 +1,4 @@
-function [ Q, alphaNew ] = fittedQ( k, n, gamma, thetasQ, maxIter )
+function [ Q, alphaNew ] = fittedQ( k, n, gamma, thetasQ, maxIter, isDeterministic )
 % k: number of features
 alphaOld = ones(k, 1);
 alphaNew = -rand(1,k)';
@@ -14,7 +14,7 @@ while(iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.001)
         s(1) = -1.2 + 1.8 * rand(1);
         s(2) = -0.07 + 0.14 * rand(1);
         a = randi([-1,1]);
-        [y, r] = simulator(s, a);
+        [y, r] = simulator(s, a, isDeterministic);
         Z(i) = r + gamma*max([Q(y, -1), Q(y, 0), Q(y, 1)]);
         % filling line number i
         for j = 1:k
