@@ -5,20 +5,20 @@ alphaOld = zeros(k, 1);
 alphaNew = rand(1,k)';
 Q = createQ(alphaNew, thetasQ);
 
-while (iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01 )
+while (iter < maxIter && max(abs((alphaNew - alphaOld)./alphaNew)) > 0.01)
     iter = iter + 1
-    %generate one trajectory
-    r = zeros(1, lenTraj); %rewards
+    % generate one trajectory
+    r = zeros(1, lenTraj); % rewards
     S = zeros(lenTraj, 2); % state matrix
-    pi = zeros(1, lenTraj); %actions chosen
-    S(1, 1) = randi([-120, 60])/100; %x
-    S(1, 2) = randi([-70, 70])/1000; %v
+    pi = zeros(1, lenTraj); % actions chosen
+    S(1, 1) = -1.2 + 1.8 * rand(1); % x
+    S(1, 2) = -0.07 + 0.14 * rand(1); % v
     
     for t = 1:lenTraj-1
-        if iter == 1 %pick random action
+        if iter == 1 % pick random action
             pi(t) = randi([-1, 1]);
             [S(t+1, :), r(t+1)] = simulator(S(t, :), pi(t));
-        else %loop has already been looped over once, and Q is defined
+        else % loop has already been looped over once, and Q is defined
             [val, idx] = max([Q(S(t, :), -1), Q(S(t, :), 0), Q(S(t, :), 1)]); %idx = 1, 2 or 3
             pi(t) = idx - 2;
             [S(t+1, :), r(t+1)] = simulator(S(t, :), pi(t));  
@@ -35,14 +35,14 @@ while (iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01 )
         end
     end
 
-    %compute matrix A and vector b
+    % compute matrix A and vector b
     A = zeros(k, k);
     b = zeros(k, 1);
     for i = 1:k
         b(i) = 1/lenTraj*sum(r.*Phi(i,  :));
         for j = 1:k
             for t = 1:lenTraj - 1
-                A(i, j) = A(i, j) + Phi(i, t).*(Phi(j, t) + gamma*Phi(j, t+1)); 
+                A(i, j) = A(i, j) + Phi(i, t).*(Phi(j, t) - gamma*Phi(j, t+1)); 
             end
         end
     end
@@ -51,5 +51,5 @@ while (iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01 )
     %alphaNew = inv(A)*b;
     Q = createQ(alphaNew, thetasQ);
 end
-end
 
+end
