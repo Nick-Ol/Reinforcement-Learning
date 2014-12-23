@@ -4,7 +4,7 @@ x = s(1);
 v = s(2);
 
 xn = max(min(x + v, 0.6), -1.2);
-if isDeterminstic
+if isDeterministic
     epsilon = 0; % deterministic case
 else
     epsilon = -0.0005 + 0.0014 * rand(1);
