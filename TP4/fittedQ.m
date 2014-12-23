@@ -5,7 +5,7 @@ alphaNew = -rand(1,k)'/10;
 Q = createQ(alphaNew, thetasQ);
 iter = 0;
 
-while(iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.001)
+while(iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01)
     iter = iter + 1
     Z = zeros(n, 1);
     X = zeros(n, k); % n observations, k features
