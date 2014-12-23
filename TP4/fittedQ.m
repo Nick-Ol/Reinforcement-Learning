@@ -5,7 +5,7 @@ alphaNew = rand(1,k)';
 Q = createQ(alphaNew, thetasQ);
 iter = 0;
 
-while(iter < maxIter && max(abs((alphaNew - alphaOld)./alphaNew)) > 0.01)
+while(iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01)
     iter = iter + 1
     Z = zeros(n, 1);
     X = zeros(n, k); % n observations, k features
@@ -23,7 +23,7 @@ while(iter < maxIter && max(abs((alphaNew - alphaOld)./alphaNew)) > 0.01)
     end
     % update alpha
     alphaOld = alphaNew;
-    alphaNew = inv(X'*X)*X'*Z;
+    alphaNew = inv(X'*X)*X'*Z
     %alphaNew = (X'*X)\(X'*Z);
     
     % update Q

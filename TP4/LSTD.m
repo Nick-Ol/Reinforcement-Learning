@@ -5,7 +5,7 @@ alphaOld = zeros(k, 1);
 alphaNew = rand(1,k)';
 Q = createQ(alphaNew, thetasQ);
 
-while (iter < maxIter && max(abs((alphaNew - alphaOld)./alphaNew)) > 0.01)
+while (iter < maxIter && max(abs(alphaNew - alphaOld)) > 0.01)
     iter = iter + 1
     % generate one trajectory
     r = zeros(1, lenTraj); % rewards
@@ -47,7 +47,7 @@ while (iter < maxIter && max(abs((alphaNew - alphaOld)./alphaNew)) > 0.01)
         end
     end
     alphaOld = alphaNew;
-    alphaNew = A\b;
+    alphaNew = A\b
     %alphaNew = inv(A)*b;
     Q = createQ(alphaNew, thetasQ);
 end
