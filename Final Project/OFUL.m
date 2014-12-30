@@ -1,8 +1,8 @@
-function [ rew, draws, reg, theta_estim ] = linUCB( T, alpha, MAB, theta, sigma_noise, sample )
+function [ rew, draws, reg, theta_estim ] = OFUL( T, delta, MAB, theta, sigma_noise, sample, lambda  )
 % every arm has to return a d-dimensional vector
 d = size(theta,1); % theta should be vertical
 K = length(MAB);
-A = eye(d);
+A = lambda*eye(d);
 b = zeros(d,1);
 
 Na = zeros(1, length(MAB));
@@ -22,11 +22,10 @@ for t = 1:T
     i = 1;
     for k = selected_articles_idx
         x(i,:) = MAB{k}.play();
-        upper_bound(i) = theta_estim'*x(i,:)' + alpha*sqrt(x(i,:)*(A\x(i,:)'));
+        upper_bound(i) = theta_estim'*x(i,:)' + norm(x(i,:))*(sigma_noise^2*sqrt(2*log(sqrt(det(A)/lambda^d)/delta))+sqrt(lambda)*norm(theta));
         rewards_th(i) = x(i,:)*theta;
-        i = i+1;
     end
-    [val, idx] = max(upper_bound); % idx = index in selected_articles_idx
+    [val, idx] = max(upper_bound);
     idx_article = selected_articles_idx(idx);
     
     reward = x(idx,:)*theta + mvnrnd(0,sigma_noise^2);
