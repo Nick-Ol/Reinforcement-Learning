@@ -1,7 +1,7 @@
 %% Build a Gaussian MAB
 
-MAB1 = {};
 NbArms1 = 1000;
+MAB1 = cell(1, NbArms1);
 d = 5;
 
 for i=1:NbArms1
