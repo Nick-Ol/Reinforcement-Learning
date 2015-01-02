@@ -30,7 +30,7 @@ nb_sample = 10;
 regret_lin = cumsum(reg_lin);
 [most_pulls, most_pulled_arm] = max(Na_lin) % was the best arm, the most pulled one ?
 best_arm_pulls = Na_lin(best_arm) % best arm pulled ? times
-most_pulled_arm_rew = true_rewards_exp(idx) % to be compared with best rew
+most_pulled_arm_rew = true_rewards_exp(most_pulled_arm) % to be compared with best rew
 figure;
 plot(1:T, regret_lin)
 
