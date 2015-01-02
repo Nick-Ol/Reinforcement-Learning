@@ -7,7 +7,7 @@ d = 5;
 for i=1:NbArms1
     mu = rand(d,1);
     A = rand(d,d);
-    sigma = (A+A')/2 + d*eye(d,d);
+    sigma = A*A'; % symmetric definite positive matrix
     MAB1{i} = armGaussian(mu,sigma);
 end
 
