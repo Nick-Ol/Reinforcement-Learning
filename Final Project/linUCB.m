@@ -1,9 +1,9 @@
 function [ rew, draws, reg, theta_estim ] = linUCB( T, alpha, MAB, theta, sigma_noise, sample )
 % every arm has to return a d-dimensional vector
-d = size(theta,1); % theta should be vertical
+d = size(theta, 1); % theta should be vertical
 K = length(MAB);
 A = eye(d);
-b = zeros(d,1);
+b = zeros(d, 1);
 
 Na = zeros(1, length(MAB));
 Sa = zeros(1, length(MAB));
