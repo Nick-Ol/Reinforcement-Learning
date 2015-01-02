@@ -1,5 +1,5 @@
 classdef armGaussian<handle
-    % arm having a Beta distribution
+    % arm having a Gaussian distribution
     
     properties
         mu % expectation vector
