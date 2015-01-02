@@ -28,7 +28,7 @@ alpha = 1 + sqrt(log(2/delta)/2);
 sigma_noise = 0.1;
 % Nb_arms1 articles, nb_sample tested at each iteration for faster computation
 nb_sample = 10;
-[rew_lin,draws_lin,reg_lin,theta_estim_lin, Na_lin] = linUCB(T, alpha, MAB1, theta1, sigma_noise, nb_sample);
+[rew_lin,draws_lin,reg_lin,theta_estim_lin, Na_lin, Sa_lin] = linUCB(T, alpha, MAB1, theta1, sigma_noise, nb_sample);
 regret_lin = cumsum(reg_lin);
 [val, idx] = max(Na_lin) % was the best arm, the most pulled one ?
 Na_lin(best_arm) % best arm pulled ? times

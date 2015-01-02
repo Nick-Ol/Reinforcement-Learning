@@ -1,4 +1,4 @@
-function [ rew, draws, reg, theta_estim, Na ] = linUCB( T, alpha, MAB, theta, sigma_noise, nb_samples )
+function [ rew, draws, reg, theta_estim, Na, Sa ] = linUCB( T, alpha, MAB, theta, sigma_noise, nb_samples )
 % every arm has to return a d-dimensional vector
 d = size(theta, 1); % theta should be vertical
 K = length(MAB);
