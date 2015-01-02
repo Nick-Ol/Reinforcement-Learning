@@ -18,13 +18,11 @@ for t = 1:T
     %nb_samples random indices in [1:K]:
     selected_articles_idx = selected_articles_idx(1:nb_samples); 
     upper_bound = zeros(1, nb_samples);
-    x = zeros(d, nb_samples);
     rewards_th = zeros(1, nb_samples);
     i = 1;
     for k = selected_articles_idx
-        x(:, i) = Arms{k};
-        upper_bound(i) = x(:, i)'*theta_estim + alpha*sqrt(x(:, i)'*inv(A)*x(:, i));
-        rewards_th(i) = x(:, i)'*theta;
+        upper_bound(i) = Arms{k}'*theta_estim + alpha*sqrt(Arms{k}'*inv(A)*Arms{k});
+        rewards_th(i) = Arms{k}'*theta;
         i = i+1;
     end
     [val, idx] = max(upper_bound); % idx = index in selected_articles_idx
@@ -37,8 +35,8 @@ for t = 1:T
     rew(t) = reward;
     reg(t) = max(rewards_th) - rewards_th(idx);
     
-    A = A + x(:, idx)*x(:, idx)';
-    b = b + x(:, idx)*reward;
+    A = A + Arms{idx_article}*Arms{idx_article}';
+    b = b + Arms{idx_article}*reward;
 end
 
 end
