@@ -36,6 +36,14 @@ true_rewards_exp(idx) % to be compared with best rew
 figure;
 plot(1:T, regret_lin)
 
+%% Multiple theta
+thetas = rand(d,NbArms1);
+nb_samples = NbArms1; %no sampling, first
+[rew_linmul,draws_linmul,reg_linmul,Na_linmul, Sa_linmul] = linUCB_multipletheta(T, alpha, MAB1, thetas, sigma_noise, nb_sample);
+regret_linmul = cumsum(reg_linmul);
+figure;
+plot(1:T, regret_linmul)
+
 %% Other algorithms
 [rew_oful,draws_oful,reg_oful,theta_estim_oful] = OFUL(T, delta, MAB1, theta1, sigma_noise, nb_sample, 1);
 regret_oful = cumsum(reg_oful);
