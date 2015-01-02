@@ -9,7 +9,7 @@ rew = zeros(1, T);
 draws = zeros(1, T);
 reg = zeros(1, T);
 
-obs = zeros(1, K);
+obs = zeros(1, nb_samples);
 Na = zeros(1, K);
 Sa = zeros(1, K);
 
