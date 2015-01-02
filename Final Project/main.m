@@ -26,12 +26,15 @@ T = 500; % horizon
 delta = 0.05; % concentration inequality holds with proba 1-delta
 alpha = 1 + sqrt(log(2/delta)/2);
 sigma_noise = 0.1;
-% 1000 articles, 100 potential at each turn to compute faster
-[rew_lin,draws_lin,reg_lin,theta_estim_lin] = linUCB(T, alpha, MAB1, theta1, sigma_noise, 100);
+% 1000 articles, 100 tested at each iteration for faster computation
+n_sample = 1000;
+[rew_lin,draws_lin,reg_lin,theta_estim_lin, Na_lin] = linUCB(T, alpha, MAB1, theta1, sigma_noise, n_sample);
 regret_lin = cumsum(reg_lin);
-[rew_oful,draws_oful,reg_oful,theta_estim_oful] = OFUL(T, delta, MAB1, theta1, sigma_noise, 100, 1);
+[val, idx] = max(Na_lin) % was the best arm, the most pulled one ?
+
+[rew_oful,draws_oful,reg_oful,theta_estim_oful] = OFUL(T, delta, MAB1, theta1, sigma_noise, n_sample, 1);
 regret_oful = cumsum(reg_oful);
-[rew_thom,draws_thom,reg_thom] = Thompson(T, delta, MAB1, theta1, sigma_noise, 100);
+[rew_thom,draws_thom,reg_thom] = Thompson(T, delta, MAB1, theta1, sigma_noise, n_sample);
 regret_thom = cumsum(reg_thom);
 
 figure;
