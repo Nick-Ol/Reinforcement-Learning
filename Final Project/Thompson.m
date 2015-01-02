@@ -1,7 +1,7 @@
-function [ rew, draws, reg ] = Thompson( T, delta, MAB, theta, sigma_noise, nb_samples )
+function [ rew, draws, reg ] = Thompson( T, delta, Arms, theta, sigma_noise, nb_samples )
 
 d = size(theta, 1); % theta should be vertical
-K = length(MAB);
+K = length(Arms);
 A = eye(d);
 b = zeros(d, 1);
 
@@ -21,7 +21,7 @@ for t = 1:T
     rewards_th = zeros(1, nb_samples);
     i = 1;
     for k = selected_articles_idx
-        x(i, :) = MAB{k}.play(); 
+        x(i, :) = Arms{k}; 
         rewards_th(i) = x(i, :)*theta;
         i = i+1;
     end

@@ -1,12 +1,12 @@
-function [ rew, draws, reg, theta_estim ] = OFUL( T, delta, MAB, theta, sigma_noise, nb_samples, lambda  )
+function [ rew, draws, reg, theta_estim ] = OFUL( T, delta, Arms, theta, sigma_noise, nb_samples, lambda  )
 % every arm has to return a d-dimensional vector
 d = size(theta, 1); % theta should be vertical
-K = length(MAB);
+K = length(Arms);
 A = lambda*eye(d);
 b = zeros(d, 1);
 
-Na = zeros(1, length(MAB));
-Sa = zeros(1, length(MAB));
+Na = zeros(1, length(Arms));
+Sa = zeros(1, length(Arms));
 
 rew = zeros(1, T);
 draws = zeros(1, T);
@@ -22,7 +22,7 @@ for t = 1:T
     rewards_th = zeros(1, nb_samples);
     i = 1;
     for k = selected_articles_idx
-        x(i, :) = MAB{k}.play();
+        x(i, :) = Arms{k};
         upper_bound(i) = theta_estim'*x(i, :)' + norm(x(i, :))*(sigma_noise^2*sqrt(2*log(sqrt(det(A)/lambda^d)/delta))+sqrt(lambda)*norm(theta));
         rewards_th(i) = x(i, :)*theta;
     end
