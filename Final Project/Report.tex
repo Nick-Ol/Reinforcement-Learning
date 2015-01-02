@@ -26,12 +26,24 @@
 	\tableofcontents
 \hspace{-6mm}
 
+\newpage
 \section{Introduction}
 
+%TODO What is a contextual bandit problem ? \\Give examples
 \section{Presentation of LinUCB}
 
+\subsection{Principle}
 
-\section{Impact of exploration parameter}
+At each iteration we compute an estimate of $\theta$ using a linear regression: since for all $s$ in $\llbracket 1, t \rrbracket$, we have $x_s^{\top} \theta = r_s$, left-multiplying each side by $x_s$ and summing for all indices from $1$ to $t$, we have 
+%
+$$(\sum\limits_{1}^{t}  x_s x_s^{\top} ) \theta =   \sum\limits_{1}^{t} r_s x_s$$
+$$\mathrm{i.e. \,}A \theta = b$$
+Using this formula, even if the number of iterations grows, $A$ remains of fixed size. At each iteration we can refine our observation for $\theta$.
+\\Initializing $A$ to $I_d$ corresponds to a ridge regression : indeed, if we denote $D_t$ the $t \times d$ design matrix at iteration $t$ : $D_t = \begin{pmatrix} x_1^{\top} \\ ... \\x_t^{\top} \end{pmatrix}$, we have 
+$$\theta = (D_t^{\top} D_t + I_d)^{-1} D_t R_t$$
+which is the formula for a least square ridge regression with regularization parameter equal to 1.
+%TODO influence of this parameter ?
+\subsection{Impact of exploration parameter}
 
 
 \section{Comparison with contextual Thompson sampling}
