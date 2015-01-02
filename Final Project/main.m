@@ -18,7 +18,7 @@ for i=1:NbArms1
     true_rewards_exp(i)= MAB1{i}.mu'*theta1;
 end
 
-max(true_rewards_exp)
+[best_rew, best_arm] = max(true_rewards_exp)
 
 %% Regret
 
