@@ -30,12 +30,12 @@ for t = 1:T
     [val, idx] = max(upper_bound); % idx = index in selected_articles_idx
     idx_article = selected_articles_idx(idx);
     
-    reward = x(:, idx)'*theta + mvnrnd(0, sigma_noise^2);
+    reward = rewards_th(idx) + mvnrnd(0, sigma_noise^2);
     Sa(idx_article) = Sa(idx_article) + reward;
     Na(idx_article) = Na(idx_article) + 1;
     draws(t) = idx_article;
     rew(t) = reward;
-    reg(t) = max(rewards_th) - x(:, idx)'*theta;
+    reg(t) = max(rewards_th) - rewards_th(idx);
     
     A = A + x(:, idx)*x(:, idx)';
     b = b + x(:, idx)*reward;
