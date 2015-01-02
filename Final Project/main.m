@@ -23,7 +23,7 @@ max(true_rewards_exp)
 %% Regret
 
 T = 500; % horizon
-delta = 0.05; % confidence 1-delta
+delta = 0.05; % concentration inequality holds with proba 1-delta
 alpha = 1 + sqrt(log(2/delta)/2);
 sigma_noise = 0.1;
 % 1000 articles, 100 potential at each turn to compute faster
