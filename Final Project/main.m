@@ -28,9 +28,9 @@ sigma_noise = 0.1;
 nb_sample = 10;
 [rew_lin,draws_lin,reg_lin,theta_estim_lin, Na_lin, Sa_lin] = linUCB(T, alpha, Arms, theta1, sigma_noise, nb_sample);
 regret_lin = cumsum(reg_lin);
-[val, idx] = max(Na_lin) % was the best arm, the most pulled one ?
-Na_lin(best_arm) % best arm pulled ? times
-true_rewards_exp(idx) % to be compared with best rew
+[most_pulls, most_pulled_arm] = max(Na_lin) % was the best arm, the most pulled one ?
+best_arm_pulls = Na_lin(best_arm) % best arm pulled ? times
+most_pulled_arm_rew = true_rewards_exp(idx) % to be compared with best rew
 figure;
 plot(1:T, regret_lin)
 
