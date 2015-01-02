@@ -1,4 +1,4 @@
-function [ rew, draws, reg, theta_estim ] = linUCB( T, alpha, MAB, theta, sigma_noise, nb_samples )
+function [ rew, draws, reg, theta_estim, Na ] = linUCB( T, alpha, MAB, theta, sigma_noise, nb_samples )
 % every arm has to return a d-dimensional vector
 d = size(theta, 1); % theta should be vertical
 K = length(MAB);
@@ -18,27 +18,27 @@ for t = 1:T
     %nb_samples random indices in [1:K]:
     selected_articles_idx = selected_articles_idx(1:nb_samples); 
     upper_bound = zeros(1, nb_samples);
-    x = zeros(nb_samples, d);
+    x = zeros(d, nb_samples);
     rewards_th = zeros(1, nb_samples);
     i = 1;
     for k = selected_articles_idx
-        x(i, :) = MAB{k}.play();
-        upper_bound(i) = theta_estim'*x(i, :)' + alpha*sqrt(x(i, :)*(A\x(i, :)'));
-        rewards_th(i) = x(i, :)*theta;
+        x(:, i) = MAB{k}.play();
+        upper_bound(i) = x(:, i)'*theta_estim + alpha*sqrt(x(:, i)'*inv(A)*x(:, i));
+        rewards_th(i) = x(:, i)'*theta;
         i = i+1;
     end
     [val, idx] = max(upper_bound); % idx = index in selected_articles_idx
     idx_article = selected_articles_idx(idx);
     
-    reward = x(idx, :)*theta + mvnrnd(0, sigma_noise^2);
+    reward = x(:, idx)'*theta + mvnrnd(0, sigma_noise^2);
     Sa(idx_article) = Sa(idx_article) + reward;
     Na(idx_article) = Na(idx_article) + 1;
     draws(t) = idx_article;
     rew(t) = reward;
-    reg(t) = max(rewards_th) - x(idx, :)*theta;
+    reg(t) = max(rewards_th) - x(:, idx)'*theta;
     
-    A = A + x(idx, :)'*x(idx, :);
-    b = b + x(idx, :)'*reward;
+    A = A + x(:, idx)*x(:, idx)';
+    b = b + x(:, idx)*reward;
 end
 
 end
