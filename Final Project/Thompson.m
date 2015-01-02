@@ -1,4 +1,4 @@
-function [ rew, draws, reg ] = Thompson( T, delta, MAB, theta, sigma_noise, sample )
+function [ rew, draws, reg ] = Thompson( T, delta, MAB, theta, sigma_noise, nb_samples )
 
 d = size(theta, 1); % theta should be vertical
 K = length(MAB);
@@ -15,9 +15,10 @@ Sa = zeros(1, K);
 
 for t = 1:T
     selected_articles_idx = randperm(K);
-    selected_articles_idx = selected_articles_idx(1:sample);
-    x = zeros(sample, d);
-    rewards_th = zeros(1, sample);
+    %nb_samples random indices in [1:K]:
+    selected_articles_idx = selected_articles_idx(1:nb_samples);
+    x = zeros(nb_samples, d);
+    rewards_th = zeros(1, nb_samples);
     i = 1;
     for k = selected_articles_idx
         x(i, :) = MAB{k}.play(); 
@@ -27,7 +28,7 @@ for t = 1:T
     theta_estim = A\b;
     B = eye(d, d) + x'*x;
     theta_thompson = mvnrnd(theta_estim, sigma_noise^2*9*d*log(t/delta)*inv(B));
-    for i = 1:sample
+    for i = 1:nb_samples
         obs(i) = x(i, :)*theta_thompson';
     end
     %pick best arm

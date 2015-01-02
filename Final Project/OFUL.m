@@ -1,4 +1,4 @@
-function [ rew, draws, reg, theta_estim ] = OFUL( T, delta, MAB, theta, sigma_noise, sample, lambda  )
+function [ rew, draws, reg, theta_estim ] = OFUL( T, delta, MAB, theta, sigma_noise, nb_samples, lambda  )
 % every arm has to return a d-dimensional vector
 d = size(theta, 1); % theta should be vertical
 K = length(MAB);
@@ -15,10 +15,11 @@ reg = zeros(1, T);
 for t = 1:T
     theta_estim = A\b;
     selected_articles_idx = randperm(K);
-    selected_articles_idx = selected_articles_idx(1:sample);
-    upper_bound = zeros(1, sample);
-    x = zeros(sample, d);
-    rewards_th = zeros(1, sample);
+    %nb_samples random indices in [1:K]:
+    selected_articles_idx = selected_articles_idx(1:nb_samples);
+    upper_bound = zeros(1, nb_samples);
+    x = zeros(nb_samples, d);
+    rewards_th = zeros(1, nb_samples);
     i = 1;
     for k = selected_articles_idx
         x(i, :) = MAB{k}.play();
