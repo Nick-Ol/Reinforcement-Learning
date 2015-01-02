@@ -18,26 +18,24 @@ for t = 1:T
     %nb_samples random indices in [1:K]:
     selected_articles_idx = selected_articles_idx(1:nb_samples);
     upper_bound = zeros(1, nb_samples);
-    x = zeros(nb_samples, d);
     rewards_th = zeros(1, nb_samples);
     i = 1;
     for k = selected_articles_idx
-        x(i, :) = Arms{k};
-        upper_bound(i) = theta_estim'*x(i, :)' + norm(x(i, :))*(sigma_noise^2*sqrt(2*log(sqrt(det(A)/lambda^d)/delta))+sqrt(lambda)*norm(theta));
-        rewards_th(i) = x(i, :)*theta;
+        upper_bound(i) = Arms{k}'*theta_estim + sigma_noise^2*sqrt(2*log(sqrt(det(A)/lambda^d)/delta))+sqrt(lambda)*norm(theta);
+        rewards_th(i) = Arms{k}'*theta;
     end
     [val, idx] = max(upper_bound);
     idx_article = selected_articles_idx(idx);
     
-    reward = x(idx, :)*theta + mvnrnd(0, sigma_noise^2);
+    reward = rewards_th(idx) + mvnrnd(0, sigma_noise^2);
     Sa(idx_article) = Sa(idx_article) + reward;
     Na(idx_article) = Na(idx_article) + 1;
     draws(t) = idx_article;
     rew(t) = reward;
-    reg(t) = max(rewards_th) - x(idx, :)*theta;
+    reg(t) = max(rewards_th) - rewards_th(idx);
     
-    A = A + x(idx, :)'*x(idx, :);
-    b = b + x(idx, :)'*reward;
+    A = A + Arms{idx_article}*Arms{idx_article}';
+    b = b + Arms{idx_article}*reward;
 end
 
 end
