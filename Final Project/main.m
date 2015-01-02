@@ -1,11 +1,11 @@
 %% Build a Gaussian MAB
 
-NbArms1 = 500;
+NbArms1 = 200;
 Arms = cell(1, NbArms1);
-d = 100;
+d = 5;
 
 for i=1:NbArms1
-    Arms{i} = rand(d, 1);
+    Arms{i} = 10 * rand(d, 1) - 5;
     Arms{i} = Arms{i} / norm(Arms{i});
 end
 
@@ -20,7 +20,7 @@ end
 
 %% LinUCB
 
-T = 1000; % horizon
+T = 2000; % horizon
 delta = 0.05; % concentration inequality holds with proba 1-delta
 alpha = 1 + sqrt(log(2/delta)/2);
 sigma_noise = 0.1;
