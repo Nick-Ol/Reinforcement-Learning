@@ -1,4 +1,4 @@
-%% Build a Gaussian MAB
+%% Problem setup
 
 NbArms1 = 1000;
 Arms = cell(1, NbArms1);
@@ -18,24 +18,24 @@ end
 
 [best_rew, best_arm] = max(true_rewards_exp);
 
-%% LinUCB
-
+sigma_noise = 1;
 T = 10000; % horizon
 delta = 0.05; % concentration inequality holds with proba 1-delta
 alpha = 1 + sqrt(log(2/delta)/2);
-sigma_noise = 1;
-% Nb_arms1 articles, nb_samples tested at each iteration for faster computation
+% Nb_arms1 articles, nb_samples tested at each iteration
 nb_samples = 100;
+
+%% LinUCB
 [rew_lin,draws_lin,reg_lin,theta_estim_lin, Na_lin, Sa_lin] = linUCB(T, alpha, Arms, theta1, sigma_noise, nb_samples);
 regret_lin = cumsum(reg_lin);
 [most_pulls, most_pulled_arm] = max(Na_lin);% was the best arm, the most pulled one ?
 most_pulled_arm_rew = true_rewards_exp(most_pulled_arm); % to be compared with best rew
 best_arm_pulls = Na_lin(best_arm); % best arm pulled ? times
-figure;
+figure
 plot(1:T, regret_lin)
 legend('LinUCB')
 
-%% Naive = linUCB with alpha = 0
+%% Naive: linUCB with alpha = 0
 [rew_naive,draws_naive,reg_naive,theta_estim_naive, Na_naive, Sa_naive] = linUCB(T, 0, Arms, theta1, sigma_noise, nb_samples);
 regret_naive = cumsum(reg_naive);
 [most_pulls_naive, most_pulled_arm_naive] = max(Na_naive); % was the best arm, the most pulled one ?
