@@ -131,7 +131,7 @@ $$\begin{aligned} \mathbb{P}( \vert x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \t
 Using a union bound for the nb\_samples possible arms, we get a uniform bound with probability $1 - \delta$.
 \\Combining the bound on the first term and second term, with probability $1 - \delta$, 
 $$\vert x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta \vert \leq (1 + \alpha) \sqrt{x^{\top}_a A_t^{-1} x_a}$$
-where $\alpha = \sqrt{\frac{\mathrm{log} (2K/\delta}{2}}$. %TODO there's an extra K here...
+where $\alpha = \sqrt{\frac{\mathrm{log} (2K/\delta}{2}}$. %TODO there's an extra K here... (K = nb_samples)
 
 %
 \subsection{Impact of exploration parameter}
