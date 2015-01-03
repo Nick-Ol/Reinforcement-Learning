@@ -14,6 +14,8 @@
 \usepackage{lastpage}
 \usepackage[T1]{fontenc}
 \usepackage{stmaryrd}
+\usepackage[]{algorithm2e}
+
 \pagestyle{plain}
 
 
@@ -67,7 +69,32 @@ $$\hat{\theta}_t= (D_t^{\top} D_t + I_d)^{-1} D_t R_t$$
 which is the formula for a least square ridge regression with regularization parameter equal to 1.
 %TODO influence of this parameter ?
 %
-\\The code can be found in \texttt{linUCB.m}.
+%TODO how is the UCB computed ?
+%TODO pseudo code
+\\\begin{algorithm}[H]
+ \KwData{bandit $\mathcal{A}$, exploration parameter $\alpha$, NbSamples, horizon $T$}
+ $A_1 = I_d$ \;
+ $b_1 = 0$ \;
+ \For{$t = 1, 2, \ldots, T$}{
+  $\hat{\theta}_t = A_t^{-1} b_t$ \;
+  Select a set $\mathcal{A}_t \subset \mathcal{A}$ of NbSamples arms \;
+  
+  \For{$a \in \mathcal{A}_t$}{
+    $p_{t,a} = \hat{\theta}_t^{\top} x_a + \alpha \sqrt{x_a^{\top}A_t^{-1} x_a}$
+   }
+   
+   Choose arm with higher UCB: $a^*_t = \mathrm{argmax}_{a \in \mathcal{A}_t} p_{t,a} $ \;
+   Observe reward $r_t$ \;
+   $A_{t+1} = A_t + x_{a^*_t} x_{a^*_t}^{\top}$ \;
+   $b_{t+1} = b_t + r_t x_{a^*_t}$ \;
+   }
+ 
+  \KwResult{sequences of actions $(a^*_t)$ and payoffs $(r_t)$, $\hat{\theta}_T$}
+ \vspace{5mm}
+ \caption{LinUCB alogrithm}
+\end{algorithm}
+%
+\vspace{5mm}The code can be found in \texttt{linUCB.m}.
 %
 \subsection{Impact of exploration parameter}
 The exploration parameter $\alpha$ is related to $\delta$ by $\alpha = 1 + \sqrt{\frac{\mathrm{log \,}2 / \delta}{2}}$. As the concentration inequality holds with probability $1 - \delta$, if $\delta \to 0$, then ${\alpha \to \infty}$, meaning that if we want a very high probability to find the observed value in a given set, this set must be very large.
