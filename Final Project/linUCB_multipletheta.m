@@ -43,7 +43,7 @@ for t = (length(Arms)+1):T
     i = 1;
 	for k = selected_articles_idx
         theta_estim = A{k}\b{k};
-        upper_bound(i) = Arms{k}'*theta_estim + alpha*sqrt(x(:, i)'*inv(A{k})*x(:, i));
+        upper_bound(i) = Arms{k}'*theta_estim + alpha*sqrt(Arms{k}'*inv(A{k})*Arms{k});
         rewards_th(i) = Arms{k}'*thetas(:, k);
         i = i+1;
 	end
