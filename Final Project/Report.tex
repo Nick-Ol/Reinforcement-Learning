@@ -27,11 +27,17 @@
 \hspace{-6mm}
 
 \newpage
-\section{Introduction}
+\section*{Introduction}
 
-Here we study a contextual bandit problem, meaning that the set of arms the agent can pull might change over time. For example, we may consider the case of a newspaper website which recommends articles to a user. The arm which is pulled corresponds to the article which is suggested in first position, and the reward depends on if the user clicks on this suggestion. The problem is contextual because over time, the set of available articles can change, and the popularity of an article is likely to decrease as time goes by.
+The $K$ multi-arm bandit with partial observation setting is well-studied: at each time $t$, an agent is presented with a fixed set of $K$ arms, from which he chooses one to draw, get a reward $r_t$ (without knowing the rewards he would have obtained pulling another arm), and moves on to $t+1$. The goal of the agent is to maximize its cumulated reward, or to minimize the difference with the cumulated reward he would have had if he had always pulled the best arm.
 %
-\\[5mm]We make the hypothesis that the problem is linear: there exists $\theta \in R^d$ (the same for all arms) such that the reward for pulling arm $i$ is $\theta^{\top} x_i$.
+\\[5mm]Here we study a contextual bandit problem, meaning that the set of arms the agent can pull might change over time. For example, we may consider the case of a newspaper website which recommends articles to a user. The arm which is pulled corresponds to the article which is suggested in first position, and the reward depends on if the user clicks on this suggestion. This problem is contextual because over time, the set of available articles can change, and the popularity of an article is likely to decrease as time goes by.
+%
+\\[5mm]In our problem, we consider that each arm can be described by a vector of $d \in \mathbb{N}^*$ features, which is fixed.
+%
+\\[3mm]What's more, we study a linear bandit problem: we assume that there exists $\theta \in R^d$ (the same for all arms) such that the reward for pulling arm $i$ at time $t$ is $\theta^{\top} x_i + \epsilon_{t}$, where $\epsilon$ is a centered gaussian noise.
+%
+\\[3mm]To model the change in the set of arms over time, we consider that at each iteration the agent cannot choose amongst all the arms, but only from a fraction of them (which changes at each iteration), whose number is a parameter. In the previous newspaper website example, these features could be the frequencies of some words.
 %
 \\[5mm]For all our implementations, unless otherwise specified, we have chosen the following parameters :
 \\- horizon: $T =10,000$ draws
@@ -44,25 +50,29 @@ Here we study a contextual bandit problem, meaning that the set of arms the agen
 
 \subsection{Principle}
 
-LinUCB is derived from the non-contextual algorithm UCB. It is an optimistic algorithm, because it chooses the arms which has the highest upper confidence bound.
+In all bandit problems, there is a trade-off between exploitation and exploration: to minimize his regret, the agent must pull the best arm (exploitation), but to do so he must know the best arm (exploration). Pulling all arms uniformly results in a very good knowledge of their distributions, but in poor exploitation, while always pulling the arm which appears best so far ('naive' algorithm) performs badly too, because the best arm can give a poor reward the first time, and never be pulled again.
 %
-\\The principle of this algorithm is, at each iteration, to compute an estimate of $\theta$ and an upper confidence bound for each of the available arms.
+\\[5mm]LinUCB (Linear Upper Confidence Bound) algorithm is derived from the non-contextual algorithm UCB. It is an optimistic algorithm, because it chooses the arms which has the highest upper confidence bound.
 %
-\\At each iteration $t$ an estimate of $\theta$  is computed using a linear regression: since for all $s$ in $\llbracket 1, t \rrbracket$, we have $x_s^{\top} \theta = r_s$, left-multiplying each side by $x_s$ and summing for all indices from $1$ to $t$, we have 
+\\The principle of this algorithm is, at each iteration, to compute an estimate for $\theta$ and an upper confidence bound for each of the available arms (both based on previous observations), then to pull the arm which has the highest UCB, update the observations made so far, and move to next iteration, where a new estimate of $\theta$ is computed, etc.
+%
+\\At each iteration $t$ an estimate of $\theta$, $\hat{\theta}_t$, is computed using a linear regression: since for all $s$ in $\llbracket 1, t \rrbracket$, we have $x_s^{\top} \theta = r_s$, left-multiplying each side by $x_s$ and summing for all indices from $1$ to $t$, we have 
 %
 $$(\sum\limits_{1}^{t}  x_s x_s^{\top} ) \theta =   \sum\limits_{1}^{t} r_s x_s$$
 which can be written in matricial form $A_t \theta = b_t$.
-\\Using this formula, even if the number of iterations grows, $A$ remains of fixed size. At each iteration we update $A$ and update for $\theta$.
-\\Initializing $A$ to $I_d$ corresponds to a ridge regression : indeed, if we denote $D_t$ the $t \times d$ design matrix at iteration $t$ : $D_t = \begin{pmatrix} x_1^{\top} \\ ... \\x_t^{\top} \end{pmatrix}$, we have 
-$$\theta = (D_t^{\top} D_t + I_d)^{-1} D_t R_t$$
+\\Using this formula, even if the number of iterations grows, $A_t$ and $b_t$ remain of fixed size. At each iteration we update $A_t$, $b_t$ and the estimate $\hat{\theta}_t = A_t^{-1}b_t$. Since inversing $A_t$ in computationnally costly, we might update it every $k$ iterations only, and thus use the same $\hat{\theta}_t^{\top}$ for $k$ consecutive iterations.
+%
+\\[3mm]Initializing $A$ to $I_d$ corresponds to a ridge regression : indeed, if we denote $D_t$ the $t \times d$ design matrix at iteration $t$ : $D_t = \begin{pmatrix} x_1^{\top} \\ ... \\x_t^{\top} \end{pmatrix}$, we have 
+$$\hat{\theta}_t= (D_t^{\top} D_t + I_d)^{-1} D_t R_t$$
 which is the formula for a least square ridge regression with regularization parameter equal to 1.
 %TODO influence of this parameter ?
 %
+\\The code can be found in \texttt{linUCB.m}.
 %
 \subsection{Impact of exploration parameter}
-The exploration parameter $\alpha$ is related to $\delta$ by $\alpha = 1 + \sqrt{\frac{\mathrm{log \,}2 / \delta}{2}}$. As the concentration inequality holds with probability $1 - \delta$, if $\delta \mapsto 0$, then $\alpha \mapsto \infty$ : if we want a very high probability to find the observed value in a given set, this set must be very large.
+The exploration parameter $\alpha$ is related to $\delta$ by $\alpha = 1 + \sqrt{\frac{\mathrm{log \,}2 / \delta}{2}}$. As the concentration inequality holds with probability $1 - \delta$, if $\delta \to 0$, then ${\alpha \to \infty}$, meaning that if we want a very high probability to find the observed value in a given set, this set must be very large.
 %
-The higher $alpha$, the larger are the confidence sets. The algorithm is very 'suspicious' about the observed value, and explores more than with a smaller $\alpha$.
+The higher $\alpha$, the larger the confidence sets: the algorithm is very 'suspicious' about the value $\hat{\theta}_t^{\top}x_i$, and explores more than with a smaller $\alpha$.
 \\On the contrary, $\alpha = 0$ %TODO alpha cannot be lesser than 1 with current formula
 correspond to a naive version, where the arm which is pulled is just the one which has the highest mean of rewards observed so far.
 
