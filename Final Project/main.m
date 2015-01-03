@@ -45,6 +45,32 @@ figure;
 plot(1:T, regret_naive)
 legend('Naive')
 
+%% Influence of the exploration rate alpha
+nb_alphas = 7;
+alpha_range = logsample(.01, 1, nb_alphas);
+regret_alpha = zeros(nb_alphas,T);
+legendInfo = cell(1, nb_alphas+1);
+legendInfo{1}= 'Regret for naive';
+i = 1;
+for alpha = alpha_range
+    [rew_alpha,draws_alpha,reg_alpha,theta_estim_alpha, Na_alpha, Sa_alpha] = linUCB(T, alpha, Arms, theta1, sigma_noise, nb_samples);
+    regret_alpha(i,:) = cumsum(reg_alpha);
+    legendInfo{i+1} = sprintf('Regret for linUCB with alpha = %f', alpha);
+    
+    i = i+1;
+end
+
+figure;
+hold on
+plot(1:T, regret_naive)
+plot(1:T,regret_alpha(:,1:end))
+legend(legendInfo)
+hold off
+
+%select the alpha which gives the smallest regret at horizon :
+[alpha_best_val, alpha_best_idx] = min(reg_alpha(:,n));
+alpha_best = alpha_range(alpha_best_idx);
+
 %% Multiple theta
 thetas = rand(d, NbArms1);
 for k = 1:NbArms1
