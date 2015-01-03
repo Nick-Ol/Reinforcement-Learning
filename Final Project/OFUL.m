@@ -21,7 +21,7 @@ for t = 1:T
     rewards_th = zeros(1, nb_samples);
     i = 1;
     for k = selected_articles_idx
-        upper_bound(i) = Arms{k}'*theta_estim + sigma_noise^2*sqrt(2*log(sqrt(det(A)/lambda^d)/delta))+sqrt(lambda)*norm(theta);
+        upper_bound(i) = Arms{k}'*theta_estim + sqrt(Arms{k}'*inv(A)*Arms{k})*(sigma_noise^2*sqrt(2*log(sqrt(det(A)/lambda^d)/delta))+sqrt(lambda)*norm(theta));
         rewards_th(i) = Arms{k}'*theta;
     end
     [val, idx] = max(upper_bound);
