@@ -41,7 +41,8 @@ The $K$ multi-arm bandit with partial observation setting is well-studied: at ea
 %
 \\[5mm]In our problem, we consider that each arm can be described by a vector of $d \in \mathbb{N}^*$ features, which is fixed.
 %
-\\[3mm]What's more, we study a linear bandit problem: we assume that there exists $\theta \in R^d$ (the same for all arms) such that the reward for pulling arm $i$ at time $t$ is $\theta^{\top} x_i + \epsilon_{t}$, where $\epsilon$ is a centered gaussian noise.
+\\[3mm]What's more, we study a linear bandit problem: we assume that there exists $\theta \in R^d$ (the same for all arms) such that the reward for pulling arm $i$ at time $t$ is $\theta^{\top} x_i + \epsilon_{t}$, where $\epsilon$ is a centered gaussian noise. Since the noise is uncontrolable, the algorithms focus on estimating $\theta$, to choose the arm with maximal $\theta^{top}x_i$.
+\\We consider that $\theta$ is normalized, to simplify the computation of the upper confidence bound. $x_a$s are also normalized, so that adding noise has the same effect on all of them.
 %
 \\[3mm]To model the change in the set of arms over time, we consider that at each iteration the agent cannot choose amongst all the arms, but only from a fraction of them (which changes at each iteration), whose number is a parameter. In the previous newspaper website example, these features could be the frequencies of some words.
 %
@@ -52,6 +53,7 @@ The $K$ multi-arm bandit with partial observation setting is well-studied: at ea
 \\- number of arms the agent can pull from at each time $t$: nb\_samples = $100$
 \\- probability that the considered concentration inequality holds: $\delta = 0.01$
 %TODO how did we chose these ?
+%TODO state the regret we chose
 \section{Presentation of LinUCB}
 
 \subsection{Principle}
@@ -73,15 +75,13 @@ $$\hat{\theta}_t= (D_t^{\top} D_t + I_d)^{-1} D_t R_t$$
 which is the formula for a least square ridge regression with regularization parameter equal to 1.
 %TODO influence of this parameter ?
 %
-%TODO how is the UCB computed ?
 \\\begin{algorithm}[H]
  \KwData{bandit $\mathcal{A}$, exploration parameter $\alpha$, NbSamples, horizon $T$}
  $A_1 = I_d$ \;
  $b_1 = 0$ \;
  \For{$t = 1, 2, \ldots, T$}{
   $\hat{\theta}_t = A_t^{-1} b_t$ \;
-  Randomly select a set $\mathcal{A}_t \subset \mathcal{A}$ of NbSamples arms \;
-  
+  Observe NbSample feature vectors: $(x_a)_{a \in \mathcal{A}_t}$ with $\mathcal{A}_t \subset \mathcal{A}$\;
   \For{$a \in \mathcal{A}_t$}{
     $p_{t,a} = \hat{\theta}_t^{\top} x_a + \alpha \sqrt{x_a^{\top}A_t^{-1} x_a}$
    }
@@ -98,6 +98,41 @@ which is the formula for a least square ridge regression with regularization par
 \end{algorithm}
 %
 \vspace{5mm}The code can be found in \texttt{linUCB.m}.
+%
+\subsection{Computation of the UCB}
+The computation from the UCB
+%TODO noise is neglected
+\\Using the previous notations, and $R_t = (r_t)$ %TODO fix this vector
+\\The difference between the real reward for arm $a \in \mathcal{A}_t$ and the estimated reward is
+$$\begin{aligned} x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta &= x_a^{\top} A^{-1}_tb_t - x_a^{\top}A_t^{-1} A_t \theta
+\\& = x_a^{\top} A^{-1}_t b_t - x_a^{\top}A_t^{-1} (I_d + D^{\top}_tD_t) \theta
+\\& = x_a^{\top} A^{-1}_t b_t - x_a^{\top}A_t^{-1} (I_d + D^{\top}_tD_t) \theta
+\\& = x_a^{\top} A^{-1}_t D^{\top}_t R_t- x_a^{\top}A_t^{-1} (\theta + D^{\top}_tD_t \theta)
+\\& = x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \theta)- x_a^{\top}A_t^{-1} \theta 
+\end{aligned}$$
+Using triangular inequality, Cauchy-Schwarz inequality and $\Vert \theta \Vert = 1 $ we get, 
+$$ \vert x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta \vert \leq \vert x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \theta) \vert + \Vert A^{-1}_t x_a \Vert $$
+%
+%TODO one is a variance term, other is bias
+%
+For the second term, we have 
+$$\begin{aligned} 
+\Vert A^{-1}_t x_a \Vert^2  &= x^{\top}_a A_t^{-1} I_d A_t^{-1} x_a
+\\& \leq x^{\top}_a A_t^{-1} (I_d + D_t^{\top})A_t^{-1} x_a
+\\& \leq x^{\top}_a A_t^{-1} x_a
+\end{aligned}$$
+%
+And for the first one, using $\mathbb{E}[R_t - D_t \theta] = 0$ and Azuma's inequality :
+$$\begin{aligned} \mathbb{P}( \vert x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \theta) \vert \geq \alpha \sqrt{x^{\top}_a A_t^{-1} x_a})
+& \leq 2 \, \mathrm{exp} (- \frac{2 \alpha^2 x^{\top}_a A_t^{-1} x_a}{\Vert D_tA^{-1}_t x_a \Vert ^2})
+\\ &\leq 2 e^{-2 \alpha^2}
+\\ &= \frac{\delta}{ \mathrm{nb\_samples}}  % T \,
+\end{aligned}$$
+Using a union bound for the nb\_samples possible arms, we get a uniform bound with probability $1 - \delta$.
+\\Combining the bound on the first term and second term, with probability $1 - \delta$, 
+$$\vert x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta \vert \leq (1 + \alpha) \sqrt{x^{\top}_a A_t^{-1} x_a}$$
+where $\alpha = \sqrt{\frac{\mathrm{log} (2K/\delta}{2}}$. %TODO there's an extra K here...
+
 %
 \subsection{Impact of exploration parameter}
 The exploration parameter $\alpha$ is related to $\delta$ by $\alpha = 1 + \sqrt{\frac{\mathrm{log \,}2 / \delta}{2}}$. As the concentration inequality holds with probability $1 - \delta$, if $\delta \to 0$, then ${\alpha \to \infty}$, meaning that if we want a very high probability to find the observed value in a given set, this set must be very large.
