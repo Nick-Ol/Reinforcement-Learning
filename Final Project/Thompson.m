@@ -1,4 +1,4 @@
-function [ rew, draws, reg ] = Thompson( T, delta, Arms, theta, sigma_noise, nb_samples )
+function [ rew, draws, reg, Na, Sa ] = Thompson( T, delta, Arms, theta, sigma_noise, nb_samples )
 
 d = size(theta, 1); % theta should be vertical
 K = length(Arms);
@@ -26,8 +26,7 @@ for t = 1:T
         i = i+1;
     end
     theta_estim = A\b;
-    B = eye(d, d) + x'*x;
-    theta_thompson = mvnrnd(theta_estim, sigma_noise^2*9*d*log(t/delta)*inv(B));
+    theta_thompson = mvnrnd(theta_estim, sigma_noise^2*9*d*log(T/delta)*inv(A));
     for i = 1:nb_samples
         obs(i) = x(i, :)*theta_thompson';
     end
@@ -35,15 +34,15 @@ for t = 1:T
     [val, idx] = max(obs);
     idx_article = selected_articles_idx(idx);
     
-    reward = x(idx, :)*theta + mvnrnd(0, sigma_noise^2);
+    reward = rewards_th(idx) + mvnrnd(0, sigma_noise^2);
     Sa(idx_article) = Sa(idx_article) + reward;
     Na(idx_article) = Na(idx_article) + 1;
     draws(t) = idx_article;
     rew(t) = reward;
-    reg(t) = max(rewards_th) - x(idx, :)*theta;
+    reg(t) = max(rewards_th) - rewards_th(idx);
     
-    A = A + x(idx, :)'*x(idx, :);
-    b = b + x(idx, :)'*reward;   
+    A = A + Arms{idx_article}*Arms{idx_article}';
+    b = b + Arms{idx_article}*reward;
 end
 
 end
