@@ -29,22 +29,42 @@
 \newpage
 \section{Introduction}
 
-%TODO What is a contextual bandit problem ? \\Give examples
+Here we study a contextual bandit problem, meaning that the set of arms the agent can pull might change over time. For example, we may consider the case of a newspaper website which recommends articles to a user. The arm which is pulled corresponds to the article which is suggested in first position, and the reward depends on if the user clicks on this suggestion. The problem is contextual because over time, the set of available articles can change, and the popularity of an article is likely to decrease as time goes by.
+%
+\\[5mm]We make the hypothesis that the problem is linear: there exists $\theta \in R^d$ (the same for all arms) such that the reward for pulling arm $i$ is $\theta^{\top} x_i$.
+%
+\\[5mm]For all our implementations, unless otherwise specified, we have chosen the following parameters :
+\\- horizon: $T =10,000$ draws
+\\- dimension of the feature space: $d = 100$
+\\- total number of arms: NbArms $= 1,000$
+\\- number of arms the agent can pull from at each time $t$: nb\_samples = $100$
+\\- probability that the considered concentration inequality holds: $\delta = 0.01$
+%TODO how did we chose these ?
 \section{Presentation of LinUCB}
 
 \subsection{Principle}
 
-At each iteration we compute an estimate of $\theta$ using a linear regression: since for all $s$ in $\llbracket 1, t \rrbracket$, we have $x_s^{\top} \theta = r_s$, left-multiplying each side by $x_s$ and summing for all indices from $1$ to $t$, we have 
+LinUCB is derived from the non-contextual algorithm UCB. It is an optimistic algorithm, because it chooses the arms which has the highest upper confidence bound.
+%
+\\The principle of this algorithm is, at each iteration, to compute an estimate of $\theta$ and an upper confidence bound for each of the available arms.
+%
+\\At each iteration $t$ an estimate of $\theta$  is computed using a linear regression: since for all $s$ in $\llbracket 1, t \rrbracket$, we have $x_s^{\top} \theta = r_s$, left-multiplying each side by $x_s$ and summing for all indices from $1$ to $t$, we have 
 %
 $$(\sum\limits_{1}^{t}  x_s x_s^{\top} ) \theta =   \sum\limits_{1}^{t} r_s x_s$$
-$$\mathrm{i.e. \,}A \theta = b$$
-Using this formula, even if the number of iterations grows, $A$ remains of fixed size. At each iteration we can refine our observation for $\theta$.
+which can be written in matricial form $A_t \theta = b_t$.
+\\Using this formula, even if the number of iterations grows, $A$ remains of fixed size. At each iteration we update $A$ and update for $\theta$.
 \\Initializing $A$ to $I_d$ corresponds to a ridge regression : indeed, if we denote $D_t$ the $t \times d$ design matrix at iteration $t$ : $D_t = \begin{pmatrix} x_1^{\top} \\ ... \\x_t^{\top} \end{pmatrix}$, we have 
 $$\theta = (D_t^{\top} D_t + I_d)^{-1} D_t R_t$$
 which is the formula for a least square ridge regression with regularization parameter equal to 1.
 %TODO influence of this parameter ?
+%
+%
 \subsection{Impact of exploration parameter}
-
+The exploration parameter $\alpha$ is related to $\delta$ by $\alpha = 1 + \sqrt{\frac{\mathrm{log \,}2 / \delta}{2}}$. As the concentration inequality holds with probability $1 - \delta$, if $\delta \mapsto 0$, then $\alpha \mapsto \infty$ : if we want a very high probability to find the observed value in a given set, this set must be very large.
+%
+The higher $alpha$, the larger are the confidence sets. The algorithm is very 'suspicious' about the observed value, and explores more than with a smaller $\alpha$.
+\\On the contrary, $\alpha = 0$ %TODO alpha cannot be lesser than 1 with current formula
+correspond to a naive version, where the arm which is pulled is just the one which has the highest mean of rewards observed so far.
 
 \section{Comparison with contextual Thompson sampling}
 
