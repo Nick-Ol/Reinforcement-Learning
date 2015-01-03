@@ -1,4 +1,4 @@
-function [ rew, draws, reg, theta_estim ] = OFUL( T, delta, Arms, theta, sigma_noise, nb_samples, lambda  )
+function [ rew, draws, reg, theta_estim, Na, Sa ] = OFUL( T, delta, Arms, theta, sigma_noise, nb_samples, lambda  )
 % every arm has to return a d-dimensional vector
 d = size(theta, 1); % theta should be vertical
 K = length(Arms);
