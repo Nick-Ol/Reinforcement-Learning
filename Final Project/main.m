@@ -71,7 +71,7 @@ hold off
 [alpha_best_val, alpha_best_idx] = min(reg_alpha(:,n));
 alpha_best = alpha_range(alpha_best_idx);
 
-%% Multiple theta
+%% Disjoint Linear Model
 thetas = rand(d, NbArms1);
 for k = 1:NbArms1
     thetas(:, k) = thetas(:, k)/norm(thetas(:, k));
@@ -92,7 +92,7 @@ most_pulled_arm_rew_mul = true_rewards_exp_mul(most_pulled_arm_mul); % to be com
 best_arm_pulls_mul = Na_linmul(best_arm_mul); % best arm pulled ? times
 figure;
 plot(1:T, regret_linmul)
-legend('LinUCB for multiple thetas')
+legend('LinUCB for disjoint linear model')
 
 %% OFUL
 [rew_oful,draws_oful,reg_oful,theta_estim_oful,Na_oful,Sa_oful] = OFUL(T, delta, Arms, theta1, sigma_noise, nb_samples, 1);
