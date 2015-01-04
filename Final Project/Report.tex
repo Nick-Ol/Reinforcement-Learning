@@ -49,8 +49,8 @@ The $K$ multi-arm bandit with partial observation setting is well-studied: at ea
 \\[5mm]For all our implementations, unless otherwise specified, we have chosen the following parameters :
 \\- horizon: $T =10,000$ draws
 \\- dimension of the feature space: $d = 100$
-\\- total number of arms: NbArms $= 1,000$
-\\- number of arms the agent can pull from at each time $t$: nb\_samples = $100$
+\\- total number of arms: N $= 1,000$
+\\- number of arms the agent can pull from at each time $t$: K = $100$
 \\- probability that the considered concentration inequality holds: $\delta = 0.01$
 %TODO how did we chose these ?
 %TODO state the regret we chose
@@ -70,8 +70,9 @@ $$(\sum\limits_{1}^{t}  x_s x_s^{\top} ) \theta =   \sum\limits_{1}^{t} r_s x_s$
 which can be written in matricial form $A_t \theta = b_t$.
 \\Using this formula, even if the number of iterations grows, $A_t$ and $b_t$ remain of fixed size. At each iteration we update $A_t$, $b_t$ and the estimate $\hat{\theta}_t = A_t^{-1}b_t$. Since inversing $A_t$ in computationnally costly, we might update it every $k$ iterations only, and thus use the same $\hat{\theta}_t$ for $k$ consecutive iterations.
 %
-\\[3mm]Initializing $A$ to $I_d$ corresponds to a ridge regression : indeed, if we denote $D_t$ the $t \times d$ design matrix at iteration $t$ : $D_t = \begin{pmatrix} x_1^{\top} \\ ... \\x_t^{\top} \end{pmatrix}$, we have 
-$$\hat{\theta}_t= (D_t^{\top} D_t + I_d)^{-1} D_t R_t$$
+\\[3mm]Initializing $A$ to $I_d$ corresponds to a ridge regression : indeed, if we denote $D_t$ the $t \times d$ design matrix at iteration $t$ : $D_t = \begin{pmatrix} x_1^{\top} \\ ... \\x_t^{\top} \end{pmatrix}$ and $R_t$ the rewards vector $\begin{pmatrix} r_1 \\ ... \\r_t \end{pmatrix}$ , we have: 
+%
+$$\hat{\theta}_t= (D_t^{\top} D_t + I_d)^{-1} D_t^{\top} R_t$$
 which is the formula for a least square ridge regression with regularization parameter equal to 1.
 %TODO influence of this parameter ?
 %
@@ -100,17 +101,16 @@ which is the formula for a least square ridge regression with regularization par
 \vspace{5mm}The code can be found in \texttt{linUCB.m}.
 %
 \subsection{Computation of the UCB}
-The computation from the UCB
-%TODO noise is neglected
-\\Using the previous notations, and $R_t = (r_t)$ %TODO fix this vector
-\\The difference between the real reward for arm $a \in \mathcal{A}_t$ and the estimated reward is
+Since noise is unpredictable, the algorithm only focuses on the mean reward for an arm, $x_a^{\top} \theta$.
+\\Using the previous notations $D_t$ and $R_t$, the difference between the real and estimated rewards at time $t$ for arm $a \in \mathcal{A}_t$ is:
 $$\begin{aligned} x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta &= x_a^{\top} A^{-1}_tb_t - x_a^{\top}A_t^{-1} A_t \theta
 \\& = x_a^{\top} A^{-1}_t b_t - x_a^{\top}A_t^{-1} (I_d + D^{\top}_tD_t) \theta
 \\& = x_a^{\top} A^{-1}_t b_t - x_a^{\top}A_t^{-1} (I_d + D^{\top}_tD_t) \theta
 \\& = x_a^{\top} A^{-1}_t D^{\top}_t R_t- x_a^{\top}A_t^{-1} (\theta + D^{\top}_tD_t \theta)
 \\& = x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \theta)- x_a^{\top}A_t^{-1} \theta 
 \end{aligned}$$
-Using triangular inequality, Cauchy-Schwarz inequality and $\Vert \theta \Vert = 1 $ we get, 
+%
+Using triangular inequality, Cauchy-Schwarz inequality, $A_t^{\top} = A_t$ and ${\Vert \theta \Vert = 1}$, we get:
 $$ \vert x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta \vert \leq \vert x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \theta) \vert + \Vert A^{-1}_t x_a \Vert $$
 %
 %TODO one is a variance term, other is bias
@@ -118,7 +118,7 @@ $$ \vert x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta \vert \leq \vert x_a^{\to
 For the second term, we have 
 $$\begin{aligned} 
 \Vert A^{-1}_t x_a \Vert^2  &= x^{\top}_a A_t^{-1} I_d A_t^{-1} x_a
-\\& \leq x^{\top}_a A_t^{-1} (I_d + D_t^{\top})A_t^{-1} x_a
+\\& \leq x^{\top}_a A_t^{-1} (I_d + D_t^{\top}D_t)A_t^{-1} x_a
 \\& \leq x^{\top}_a A_t^{-1} x_a
 \end{aligned}$$
 %
@@ -126,16 +126,16 @@ And for the first one, using $\mathbb{E}[R_t - D_t \theta] = 0$ and Azuma's ineq
 $$\begin{aligned} \mathbb{P}( \vert x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \theta) \vert \geq \alpha \sqrt{x^{\top}_a A_t^{-1} x_a})
 & \leq 2 \, \mathrm{exp} (- \frac{2 \alpha^2 x^{\top}_a A_t^{-1} x_a}{\Vert D_tA^{-1}_t x_a \Vert ^2})
 \\ &\leq 2 e^{-2 \alpha^2}
-\\ &= \frac{\delta}{ \mathrm{nb\_samples}}  % T \,
+\\ &= \frac{\delta}{ \mathrm{K}}  % T \,
 \end{aligned}$$
-Using a union bound for the nb\_samples possible arms, we get a uniform bound with probability $1 - \delta$.
+Using a union bound for the K possible arms, we get a uniform bound with probability $1 - \delta$.
 \\Combining the bound on the first term and second term, with probability $1 - \delta$, 
 $$\vert x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta \vert \leq (1 + \alpha) \sqrt{x^{\top}_a A_t^{-1} x_a}$$
-where $\alpha = \sqrt{\frac{\mathrm{log} (2K/\delta}{2}}$. %TODO there's an extra K here... (K = nb_samples)
+where $\alpha = \sqrt{\frac{\mathrm{log} (2K/\delta)}{2}}$. %TODO there's an extra K here... (K = K)
 
 %
 \subsection{Impact of exploration parameter}
-The exploration parameter $\alpha$ is related to $\delta$ by $\alpha = 1 + \sqrt{\frac{\mathrm{log \,}2 / \delta}{2}}$. As the concentration inequality holds with probability $1 - \delta$, if $\delta \to 0$, then ${\alpha \to \infty}$, meaning that if we want a very high probability to find the observed value in a given set, this set must be very large.
+The exploration parameter $\alpha$ is related to $\delta$ by $\alpha = 1 + \sqrt{\frac{\mathrm{log \,}(2 / \delta)}{2}}$. As the concentration inequality holds with probability $1 - \delta$, if $\delta \to 0$, then ${\alpha \to \infty}$, meaning that if we want a very high probability to find the observed value in a given set, this set must be very large.
 %
 The higher $\alpha$, the larger the confidence sets: the algorithm is very 'suspicious' about the value $\hat{\theta}_t^{\top}x_i$, and explores more than with a smaller $\alpha$.
 \\On the contrary, $\alpha = 0$ %TODO alpha cannot be lesser than 1 with current formula
