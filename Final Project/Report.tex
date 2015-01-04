@@ -80,12 +80,12 @@ which is the formula for a least square ridge regression with regularization par
 %
 \\[5mm]The pseudo-code for LinUCB is the following:
 \\[3mm]\begin{algorithm}[H]
- \KwData{bandit $\mathcal{A}$, exploration parameter $\alpha$, NbSamples, horizon $T$}
+ \KwData{bandit $\mathcal{A}$, exploration parameter $\alpha$, $K$, horizon $T$}
  $A_1 = I_d$ \;
  $b_1 = 0$ \;
  \For{$t = 1, 2, \ldots, T$}{
   $\hat{\theta}_t = A_t^{-1} b_t$ \;
-  Observe NbSample feature vectors: $(x_a)_{a \in \mathcal{A}_t}$ with $\mathcal{A}_t \subset \mathcal{A}$\;
+  Observe $K$ feature vectors: $(x_a)_{a \in \mathcal{A}_t}$ with $\mathcal{A}_t \subset \mathcal{A}$\;
   \For{$a \in \mathcal{A}_t$}{
     $p_{t,a} = \hat{\theta}_t^{\top} x_a + \alpha \sqrt{x_a^{\top}A_t^{-1} x_a}$
    }
@@ -163,12 +163,12 @@ OFUL (optimism in the face of uncertainty) is also an optimistic algorithm, beca
 %
 \\The pseudo code for the OFUL algorithm is:
 \\\begin{algorithm}[H]
- \KwData{bandit $\mathcal{A}$, exploration parameter $\alpha$, NbSamples, horizon $T$}
+ \KwData{bandit $\mathcal{A}$, exploration parameter $\alpha$, $K$, horizon $T$}
  $A_1 = I_d$ \;
  $b_1 = 0$ \;
  \For{$t = 1, 2, \ldots, T$}{
   $\hat{\theta}_t = A_t^{-1} b_t$ \;
-  Randomly select a set $\mathcal{A}_t \subset \mathcal{A}$ of NbSamples arms \;
+  Randomly select a set $\mathcal{A}_t \subset \mathcal{A}$ of $K$ arms \;
   
   \For{$a \in \mathcal{A}_t$}{
     $p_{t,a} = \hat{\theta}_t^{\top} x_a + f(t,a)$
@@ -186,12 +186,14 @@ OFUL (optimism in the face of uncertainty) is also an optimistic algorithm, beca
 \end{algorithm}
 %
 \vspace{5mm}
-$f(t,a)$ is the key of the algorithm, and 
-We have, with probability $1 - \delta$,
-$$\Vert \theta_t - \theta \Vert_{\bar{V}_t} 
+Computing $f(t,a)$ is the key of the algorithm; it is related to the upper bound on the estimated reward for arm $a$ at time $t$. 
+\\We have, with probability $1 - \delta$, %TODO quote where this result is from
+$$\Vert \hat{\theta}_t - \theta \Vert_{A_t} 
 \leq 
-\sigma^2 \sqrt{2 \, \mathrm{log} ( \frac{ \vert \bar{V}_t \vert^{1/2} }{\delta})} + 1$$
-
+\sigma^2 \sqrt{2 \, \mathrm{log} ( \frac{ \vert A_t \vert^{1/2} }{\delta})} + 1$$
+Where $\Vert u \Vert_A = \sqrt{u^{\top} M u }$ ($u$ is a $d\times 1$ vector, $M$ is a $d\times d$ matrix).
+\\If $A$ is invertible, then for all $u, v$ we have $\vert u^{\top} v \vert \leq \Vert u \Vert_M \Vert v \Vert_{M^{-1}}$, so if we apply this to $M = A^{-1}_t$, $u =x_a$ and $v =  \hat{\theta}_t - \theta$, we get an upper bound on $\vert x_a^{\top} \theta - x_a^{\top} \hat{\theta}_t \vert$ with probability $1-\delta$ : 
+$$f(t,a) =  \Vert x_a \Vert_{A^{-1}_t} (\sigma^2 \sqrt{2 \, \mathrm{log} ( \frac{ \vert A_t \vert^{1/2} }{\delta})} + 1)$$
 \subsection{Comparison with LinUCB}
 
 
