@@ -23,6 +23,7 @@ for t = 1:T
     for k = selected_articles_idx
         upper_bound(i) = Arms{k}'*theta_estim + sqrt(Arms{k}'*inv(A)*Arms{k})*(sigma_noise^2*sqrt(2*log(sqrt(det(A)/lambda^d)/delta))+sqrt(lambda)*norm(theta));
         rewards_th(i) = Arms{k}'*theta;
+        i = i+1;
     end
     [val, idx] = max(upper_bound);
     idx_article = selected_articles_idx(idx);
