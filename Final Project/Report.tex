@@ -39,12 +39,12 @@ The $K$ multi-arm bandit with partial observation setting is well-studied: at ea
 %
 \\[5mm]Here we study a contextual bandit problem, meaning that the set of arms the agent can pull might change over time. For example, we may consider the case of a newspaper website which recommends articles to a user. The arm which is pulled corresponds to the article which is suggested in first position, and the reward depends on if the user clicks on this suggestion. This problem is contextual because over time, the set of available articles can change, and the popularity of an article is likely to decrease as time goes by.
 %
-\\[5mm]In our problem, we consider that each arm can be described by a vector of $d \in \mathbb{N}^*$ features, which is fixed.
+\\[5mm]In our problem, we consider that each arm can be described by a vector of $d \in \mathbb{N}^*$ features, which is fixed. In the previous newspaper website example, these features could be the frequencies of some words.
 %
 \\[3mm]What's more, we study a linear bandit problem: we assume that there exists $\theta \in R^d$ (the same for all arms) such that the reward for pulling arm $i$ at time $t$ is $\theta^{\top} x_i + \epsilon_{t}$, where $\epsilon$ is a centered gaussian noise. Since the noise is uncontrolable, the algorithms focus on estimating $\theta$, to choose the arm with maximal $\theta^{top}x_i$.
 \\We consider that $\theta$ is normalized, to simplify the computation of the upper confidence bound. $x_a$s are also normalized, so that adding noise has the same effect on all of them.
 %
-\\[3mm]To model the change in the set of arms over time, we consider that at each iteration the agent cannot choose amongst all the arms, but only from a fraction of them (which changes at each iteration), whose number is a parameter. In the previous newspaper website example, these features could be the frequencies of some words.
+\\[3mm]To model the change in the set of arms over time, we consider that at each iteration the agent cannot choose amongst all the arms, but only from a fraction of them (denoted $\mathcal{A}_t$, which changes at each iteration, whose cardinal $K$ is a fixed parameter). 
 %
 \\[5mm]For all our implementations, unless otherwise specified, we have chosen the following parameters :
 \\- horizon: $T =10,000$ draws
@@ -53,12 +53,14 @@ The $K$ multi-arm bandit with partial observation setting is well-studied: at ea
 \\- number of arms the agent can pull from at each time $t$: K = $100$
 \\- probability that the considered concentration inequality holds: $\delta = 0.01$
 %TODO how did we chose these ?
-%TODO state the regret we chose
+%
+\\[5mm]What we call regret at iteration $t$ is $\theta^{\top}(x_{a_t^*} - x_{a_t})$ where $a_t$ was the arm pulled and $a_t^*$ was the arm maximizing the expected reward (${a_t^* = \mathrm{argmax}_{a \in \mathcal{A}_t} (\theta^{\top} x_a)}$).
+\\Since the noise is centered and assumed to be the same for all arms, our regret is just the expectation of the difference between the maximum reward and the reward received.
 \section{Presentation of LinUCB}
 
 \subsection{Principle}
 
-In all bandit problems, there is a trade-off between exploitation and exploration: to minimize his regret, the agent must pull the best arm (exploitation), but to do so he must know the best arm (exploration). Pulling all arms uniformly results in a very good knowledge of their distributions, but in poor exploitation, while always pulling the arm which appears best so far ('naive' algorithm) performs badly too, because the best arm can give a poor reward the first time, and never be pulled again.
+In all bandit problems, there is a trade-off between exploitation and exploration: to minimize his cumulative regret, the agent must pull the best arm (exploitation), but to do so he must know the best arm (exploration). Pulling all arms uniformly results in a very good knowledge of their distributions, but in poor exploitation, while always pulling the arm which appears best so far ('naive' algorithm) performs badly too, because the best arm can give a poor reward the first time, and never be pulled again.
 %
 \\[5mm]LinUCB (Linear Upper Confidence Bound) algorithm is derived from the non-contextual algorithm UCB. It is an optimistic algorithm, because it chooses the arms which has the highest upper confidence bound.
 %
