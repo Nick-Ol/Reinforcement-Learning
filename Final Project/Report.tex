@@ -4,8 +4,6 @@
 \usepackage{latexsym}
 \usepackage{graphicx}
 \usepackage[english]{babel}
-
-
 \usepackage{amsmath,amssymb}
 \usepackage{calc}
 \usepackage{multicol}
@@ -15,8 +13,6 @@
 \usepackage{stmaryrd}
 \usepackage[]{algorithm2e}
 \usepackage{float}
-
-
 
 
 \begin{document}
@@ -35,13 +31,13 @@
 
 \section*{Introduction}
 
-The $K$ multi-arm bandit with partial observation setting is well-studied: at each time $t$, an agent is presented with a fixed set of $K$ arms, from which he chooses one to draw, get a reward $r_t$ (without knowing the rewards he would have obtained pulling another arm), and moves on to $t+1$. The goal of the agent is to maximize its cumulated reward, or to minimize the difference with the cumulated reward he would have had if he had always pulled the best arm.
+The $K$ multi-armed bandit with partial observation setting is well-studied: at each time $t$, an agent is presented with a fixed set of $K$ arms, from which he chooses one to draw, get a reward $r_t$ (without knowing the rewards he would have obtained pulling another arm), and moves on to $t+1$. The goal of the agent is to maximize its cumulated reward, or to minimize the difference with the cumulated reward he would have had if he had always pulled the best arm.
 %
 \\[5mm]Here we study a contextual bandit problem, meaning that the set of arms the agent can pull might change over time. For example, we may consider the case of a newspaper website which recommends articles to a user. The arm which is pulled corresponds to the article which is suggested in first position, and the reward depends on if the user clicks on this suggestion. This problem is contextual because over time, the set of available articles can change, and the popularity of an article is likely to decrease as time goes by.
 %
 \\[5mm]In our problem, we consider that each arm can be described by a vector of $d \in \mathbb{N}^*$ features, which is fixed. In the previous newspaper website example, these features could be the frequencies of some words.
 %
-\\[3mm]What's more, we study a linear bandit problem: we assume that there exists $\theta \in R^d$ (the same for all arms) such that the reward for pulling arm $i$ at time $t$ is $\theta^{\top} x_i + \epsilon_{t}$, where $\epsilon$ is a centered gaussian noise. Since the noise is uncontrolable, the algorithms focus on estimating $\theta$, to choose the arm with maximal $\theta^{top}x_i$.
+\\[3mm]What's more, we study a linear bandit problem: we assume that there exists $\theta \in R^d$ (the same for all arms) such that the reward for pulling arm $i$ at time $t$ is $\theta^{\top} x_i + \epsilon_{t}$, where $\epsilon$ is a centered gaussian noise. Since the noise is uncontrolable, the algorithms focus on estimating $\theta$, to choose the arm with maximal expected reward $\theta^{\top}x_i$.
 \\We consider that $\theta$ is normalized, to simplify the computation of the upper confidence bound. $x_a$s are also normalized, so that adding noise has the same effect on all of them.
 %
 \\[3mm]To model the change in the set of arms over time, we consider that at each iteration the agent cannot choose amongst all the arms, but only from a fraction of them (denoted $\mathcal{A}_t$, which changes at each iteration, whose cardinal $K$ is a fixed parameter). 
@@ -62,7 +58,7 @@ The $K$ multi-arm bandit with partial observation setting is well-studied: at ea
 
 In all bandit problems, there is a trade-off between exploitation and exploration: to minimize his cumulative regret, the agent must pull the best arm (exploitation), but to do so he must know the best arm (exploration). Pulling all arms uniformly results in a very good knowledge of their distributions, but in poor exploitation, while always pulling the arm which appears best so far ('naive' algorithm) performs badly too, because the best arm can give a poor reward the first time, and never be pulled again.
 %
-\\[5mm]LinUCB (Linear Upper Confidence Bound) algorithm is derived from the non-contextual algorithm UCB. It is an optimistic algorithm, because it chooses the arms which has the highest upper confidence bound for its mean reward, $\theta^{\top}_a$.
+\\[5mm]LinUCB (Linear Upper Confidence Bound) algorithm is derived from the non-contextual algorithm UCB. It is an optimistic algorithm, because it chooses the arms which has the highest upper confidence bound for its mean reward, $\theta^{\top}x_a$.
 %
 \\The principle of this algorithm is, at each iteration, to compute an estimate for $\theta$ and an upper confidence bound for each of the available arms (both based on previous observations), then to pull the arm which has the highest UCB, update the observations made so far, and move to next iteration, where a new estimate of $\theta$ is computed, etc.
 %
@@ -70,7 +66,7 @@ In all bandit problems, there is a trade-off between exploitation and exploratio
 %
 $$(\sum\limits_{1}^{t}  x_s x_s^{\top} ) \theta =   \sum\limits_{1}^{t} r_s x_s$$
 which can be written in matricial form $A_t \theta = b_t$.
-\\Using this formula, even if the number of iterations grows, $A_t$ and $b_t$ remain of fixed size. At each iteration we update $A_t$, $b_t$ and the estimate $\hat{\theta}_t = A_t^{-1}b_t$. Since inversing $A_t$ in computationnally costly, we might update it every $k$ iterations only, and thus use the same $\hat{\theta}_t$ for $k$ consecutive iterations.
+\\Using this formula, even if the number of iterations grows, $A_t$ and $b_t$ remain of fixed size. At each iteration we update $A_t$, $b_t$ and the estimate $\hat{\theta}_t = A_t^{-1}b_t$. Since inversing $A_t$ in computationally costly, we might update it every $k$ iterations only, and thus use the same $\hat{\theta}_t$ for $k$ consecutive iterations.
 %
 \\[3mm]Initializing $A$ to $I_d$ corresponds to a ridge regression : indeed, if we denote $D_t$ the $t \times d$ design matrix at iteration $t$ : $D_t = \begin{pmatrix} x_1^{\top} \\ ... \\x_t^{\top} \end{pmatrix}$ and $R_t$ the rewards vector $\begin{pmatrix} r_1 \\ ... \\r_t \end{pmatrix}$ , we have: 
 %
@@ -191,8 +187,8 @@ Computing $f(t,a)$ is the key of the algorithm; it is related to the upper bound
 $$\Vert \hat{\theta}_t - \theta \Vert_{A_t} 
 \leq 
 \sigma^2 \sqrt{2 \, \mathrm{log} ( \frac{ \vert A_t \vert^{1/2} }{\delta})} + 1$$
-Where $\Vert u \Vert_A = \sqrt{u^{\top} M u }$ ($u$ is a $d\times 1$ vector, $M$ is a $d\times d$ symmetric definite positive matrix matrix).
-\\If $A$ is invertible, then for all $u, v$ we have $\vert u^{\top} v \vert \leq \Vert u \Vert_M \Vert v \Vert_{M^{-1}}$, because since $M$ is symmetric definite positive, there exists a symmetric definite positive matrix $S$ such that $S^2 = M$, and we have:
+Where $\Vert u \Vert_M = \sqrt{u^{\top} M u }$ ($u$ is a $d\times 1$ vector, $M$ is a $d\times d$ symmetric definite positive matrix matrix).
+\\If $M$ is invertible, then for all $u, v$ we have $\vert u^{\top} v \vert \leq \Vert u \Vert_M \Vert v \Vert_{M^{-1}}$, because since $M$ is symmetric definite positive, there exists a symmetric definite positive matrix $S$ such that $S^2 = M$, and we have:
  $$\begin{aligned}\vert u^{\top} v \vert &= \vert u^{\top}S^{\top} S^{-1} v \vert 
  \\&\leq \Vert Su \Vert \Vert S^{-1}v \Vert 
  \\&\leq \Vert u \Vert_M \Vert v \Vert_{M^{-1}}
@@ -213,14 +209,28 @@ $$f(t,a) =  \Vert x_a \Vert_{A^{-1}_t} (\sigma^2 \sqrt{2 \, \mathrm{log} ( \frac
                John Langford,
                Robert E. Schapire,
           \emph{A Contextual-Bandit Approach to Personalized News Article Recommendation}.
-	CoRR, %probably not
           2010.
+          
+          \bibitem{}
+          Wei Chu,
+          Lihong Li,
+          Lev Reyzin,
+          Robert E. Schapire,
+          \emph{Contextual Bandits with Linear Payoff Functions}.
+          2011.
+          
           \bibitem{}
           Thomas J. Walsh, Istvan Szita, Carlos Diuk, Michael L. Littman,
                     \emph{Exploring compact
 reinforcement-learning representations with linear regression}.
-	CoRR,
-         . %TODO date
+         2011.
+        
+        \bibitem{}
+        Emilie Kaufmann
+        \emph{Analyse de stratégies bayésiennes et fréquentistes
+        	pour l’allocation séquentielle de ressources}.
+        2014.
+        
 
 \end{thebibliography}
 
