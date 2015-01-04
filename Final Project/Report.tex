@@ -171,10 +171,10 @@ OFUL (optimism in the face of uncertainty) is also an optimistic algorithm, beca
   Randomly select a set $\mathcal{A}_t \subset \mathcal{A}$ of NbSamples arms \;
   
   \For{$a \in \mathcal{A}_t$}{
-    $p_{t,a} = \hat{\theta}_t^{\top} x_a + \alpha \sqrt{x_a^{\top}A_t^{-1} x_a}$
+    $p_{t,a} = \hat{\theta}_t^{\top} x_a + f(t,a)$
    }
    
-   Choose arm with higher UCB: $a^*_t = \mathrm{argmax}_{a \in \mathcal{A}_t} p_{t,a} $ \; %TODO update this
+   Choose arm with higher UCB: $a^*_t = \mathrm{argmax}_{a \in \mathcal{A}_t} p_{t,a} $ \; 
    Observe reward $r_t$ \;
    $A_{t+1} = A_t + x_{a^*_t} x_{a^*_t}^{\top}$ \;
    $b_{t+1} = b_t + r_t x_{a^*_t}$ \;
@@ -186,11 +186,17 @@ OFUL (optimism in the face of uncertainty) is also an optimistic algorithm, beca
 \end{algorithm}
 %
 \vspace{5mm}
+$f(t,a)$ is the key of the algorithm, and 
+We have, with probability $1 - \delta$,
+$$\Vert \theta_t - \theta \Vert_{\bar{V}_t} 
+\leq 
+\sigma^2 \sqrt{2 \, \mathrm{log} ( \frac{ \vert \bar{V}_t \vert^{1/2} }{\delta})} + 1$$
 
 \subsection{Comparison with LinUCB}
 
 
-
+%
+%
 \newpage
 \begin{thebibliography}{9}
 
