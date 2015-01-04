@@ -250,7 +250,17 @@ $$f(t,a) =  \Vert x_a \Vert_{A^{-1}_t} (\sigma^2 \sqrt{2 \, \mathrm{log} ( \frac
 
 \subsection{Comparison with LinUCB}
 
+Typically, the OFUL algorithm is very similar to linUCB but $\alpha$ is replaced by an adaptive exploration rate. Hence, we obtain a lower regret with OFUL :
 
+\begin{figure}[H]
+	\centering
+	\noindent\includegraphics[scale=0.5]{oful.png}
+	\caption{Regret for OFUL algorithm}
+\end{figure}
+
+The final regret value is here around 10 whereas it was around 200 for linUCB with the best fitted $\alpha$.
+
+The best arm was effectively the most pulled and was pulled 978 times, similar to 944 for linUCB. But, for a given sample, OFUL better detects which arm is the best among the pool.
 %
 %
 \newpage
