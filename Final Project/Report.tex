@@ -37,7 +37,7 @@ The $K$ multi-armed bandit with partial observation setting is well-studied: at 
 %
 \\[5mm]In our problem, we consider that each arm can be described by a vector of $d \in \mathbb{N}^*$ features, which is fixed. In the previous newspaper website example, these features could be the frequencies of some words.
 %
-\\[3mm]What's more, we study a linear bandit problem: we assume that there exists $\theta \in R^d$ (the same for all arms) such that the reward for pulling arm $i$ at time $t$ is $\theta^{\top} x_i + \epsilon_{t}$, where $\epsilon$ is a centered gaussian noise. Since the noise is uncontrolable, the algorithms focus on estimating $\theta$, to choose the arm with maximal expected reward $\theta^{\top}x_i$.
+\\[3mm]What's more, we study a linear bandit problem: we assume that there exists $\theta \in R^d$ (the same for all arms) such that the reward for pulling arm $i$ at time $t$ is $\theta^{\top} x_i + \epsilon_{t}$, where $\epsilon$ is a centered Gaussian noise. Since the noise is uncontrollable, the algorithms focus on estimating $\theta$, to choose the arm with maximal expected reward $\theta^{\top}x_i$.
 \\We consider that $\theta$ is normalized, to simplify the computation of the upper confidence bound. $x_a$s are also normalized, so that adding noise has the same effect on all of them.
 %
 \\[3mm]To model the change in the set of arms over time, we consider that at each iteration the agent cannot choose amongst all the arms, but only from a fraction of them (denoted $\mathcal{A}_t$, which changes at each iteration, whose cardinal $K$ is a fixed parameter). 
@@ -47,7 +47,7 @@ The $K$ multi-armed bandit with partial observation setting is well-studied: at 
 \\- dimension of the feature space: $d = 100$
 \\- total number of arms: N $= 1,000$
 \\- number of arms the agent can pull from at each time $t$: K = $100$
-\\- probability that the considered concentration inequality holds: $\delta = 0.01$
+\\- probability that the considered concentration inequality holds: $\delta = 0.05$
 %TODO how did we chose these ?
 %
 \\[5mm]What we call regret at iteration $t$ is sometimes called \emph{pseudo-regret} : ${\theta^{\top}(x_{a_t^*} - x_{a_t})}$ where $a_t$ was the arm pulled and $a_t^*$ was the arm maximizing the expected reward (${a_t^* = \mathrm{argmax}_{a \in \mathcal{A}_t} (\theta^{\top} x_a)}$).
@@ -109,7 +109,7 @@ $$\begin{aligned} x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta &= x_a^{\top} A^
 \\& = x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \theta)- x_a^{\top}A_t^{-1} \theta 
 \end{aligned}$$
 %
-Using triangular inequality, Cauchy-Schwarz inequality, $A_t^{\top} = A_t$ and ${\Vert \theta \Vert = 1}$, we get:
+Using triangular inequality, Cauchy-Schwartz inequality, $A_t^{\top} = A_t$ and ${\Vert \theta \Vert = 1}$, we get:
 $$ \vert x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta \vert \leq \vert x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \theta) \vert + \Vert A^{-1}_t x_a \Vert $$
 %
 %TODO one is a variance term, other is bias
@@ -125,12 +125,12 @@ And for the first one, using $\mathbb{E}[R_t - D_t \theta] = 0$ and Azuma's ineq
 $$\begin{aligned} \mathbb{P}( \vert x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \theta) \vert \geq \alpha \sqrt{x^{\top}_a A_t^{-1} x_a})
 & \leq 2 \, \mathrm{exp} (- \frac{2 \alpha^2 x^{\top}_a A_t^{-1} x_a}{\Vert D_tA^{-1}_t x_a \Vert ^2})
 \\ &\leq 2 e^{-2 \alpha^2}
-\\ &= \frac{\delta}{ \mathrm{K}}  % T \,
+\\ &= \delta  % T \,
 \end{aligned}$$
 Using a union bound for the K possible arms in $\mathcal{A}_t$, we get a uniform bound with probability $1 - \delta$.
 \\Combining the bound on the first term and second term, with probability $1 - \delta$, 
 $$\vert x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta \vert \leq (1 + \alpha) \sqrt{x^{\top}_a A_t^{-1} x_a}$$
-where $\alpha = \sqrt{\frac{\mathrm{log} (2K/\delta)}{2}}$. %TODO there's an extra K here... (K = K)
+where $\alpha = \sqrt{\frac{\mathrm{log} (2/\delta)}{2}}$.
 
 %
 \subsection{Impact of exploration parameter}
@@ -146,12 +146,14 @@ corresponds to a naive version, where the arm which is pulled is just the one wh
 \noindent\includegraphics[scale=0.5]{regrets_alphas.png}
 \caption{Regret curves for LinUCB with different exploration parameters}
 \end{figure}
-%TODO mention that this is only one trajectory, but gives an idea of the best alpha. See that low and high alphas perform poorly.
+
+We figure out one particular trajectory here, but we observe similar results on other draws. We see that the best value for $\alpha$ is $0.46$ here.
+%TODO See that low and high alphas perform poorly.
 %TODO mention that alpha should change over time.
 
 \subsection{LinUCB for disjoint linear models}	
 
-In the article \textit{A Contextual-Bandit Approach to Personalized News Article Recommendation}, the authors consider the case of a disjoint linear model, where we do not have $E[r_{t,a}|x_a] = x_{a}^T \theta^{*}$ anymore, but : $E[r_{t,a}|x_a] = x_{a}^T \theta_a^{*}$, i.e. a different $\theta$ for each possible arm. It is called "disjoint" as we do not have anymore the correlation between the arms.
+In the article \textit{A Contextual-Bandit Approach to Personalized News Article Recommendation} $\left[ 1\right]$, the authors consider the case of a disjoint linear model, where we do not have $E[r_{t,a}|x_a] = x_{a}^T \theta^{*}$ anymore, but : $E[r_{t,a}|x_a] = x_{a}^T \theta_a^{*}$, i.e. a different $\theta$ for each possible arm. It is called "disjoint" as we do not have anymore the correlation between the arms.
 %
 \\Still, we wanted to study the differences with the previous linUCB algorithm. We now simulate a matrix $\theta$, and not a simple value, in which each column $a$ represents $\theta_a$.
 %
@@ -171,6 +173,9 @@ Then, at iteration $t$, we pull the arm $a_t$ corresponding to $a_t = \mathrm{ar
 According to the article, this algorithm approaches a regret of $O(\sqrt{T})$.
 %
 \\By analyzing the arms pulled, we see that whereas the best arm had an expected reward of 0.7997, the most pulled arm had one of 0.7737, which is quite close, and it was pulled 1094 times. The best potential arm was pulled 683 times.
+%
+\\The code can be found in \texttt{linUCB\_multipletheta.m}.
+
 
 \section{Comparison with contextual Thompson Sampling}
 
@@ -193,6 +198,8 @@ With Thompson Sampling, we clearly see the impact of the noise and its variance 
 \end{figure}
 
 For  $\sigma^2 = 0.1$, the best arm was effectively the most pulled, and it was pulled 1549 times over 20,000. But for $\sigma^2 = 1$, the most pulled arm was only pulled 83 times, for an expected regret of 0.7433 to be compared with 0.8377 for the best arm. We see that the algorithm is much more imprecise for high value of $\sigma^2$, which seems logical, as we draw $\widehat{\theta}_t$ according to a normal law whose variance directly depends on $\sigma$. 
+%
+\\The code can be found in \texttt{Thompson.m}.
 
 \section{Analysis of OFUL algorithm}
 \subsection{Principle}
@@ -225,7 +232,8 @@ OFUL (optimism in the face of uncertainty) is also an optimistic algorithm, beca
 %
 \vspace{5mm}
 Computing $f(t,a)$ is the key of the algorithm; it is related to the upper bound on the estimated reward for arm $a$ at time $t$. 
-\\We have, with probability $1 - \delta$, %TODO quote where this result is from
+\\We have, according to \textit{Exploring compact
+	reinforcement-learning representations with linear regression} $\left[ 3\right]$ , with probability $1 - \delta$,
 $$\Vert \hat{\theta}_t - \theta \Vert_{A_t} 
 \leq 
 \sigma^2 \sqrt{2 \, \mathrm{log} ( \frac{ \vert A_t \vert^{1/2} }{\delta})} + 1$$
@@ -237,6 +245,9 @@ Where $\Vert u \Vert_M = \sqrt{u^{\top} M u }$ ($u$ is a $d\times 1$ vector, $M$
  \end{aligned}$$
 If we apply this to $M = A^{-1}_t$ (which is symmetric definite positive because $A_t$ is), $u =x_a$ and $v =  \hat{\theta}_t - \theta$, we get an upper bound on $\vert x_a^{\top} \theta - x_a^{\top} \hat{\theta}_t \vert$ with probability $1-\delta$ : 
 $$f(t,a) =  \Vert x_a \Vert_{A^{-1}_t} (\sigma^2 \sqrt{2 \, \mathrm{log} ( \frac{ \vert A_t \vert^{1/2} }{\delta})} + 1)$$
+%
+\\The code can be found in \texttt{OFUl.m}.
+
 \subsection{Comparison with LinUCB}
 
 
