@@ -54,15 +54,15 @@ The $K$ multi-arm bandit with partial observation setting is well-studied: at ea
 \\- probability that the considered concentration inequality holds: $\delta = 0.01$
 %TODO how did we chose these ?
 %
-\\[5mm]What we call regret at iteration $t$ is $\theta^{\top}(x_{a_t^*} - x_{a_t})$ where $a_t$ was the arm pulled and $a_t^*$ was the arm maximizing the expected reward (${a_t^* = \mathrm{argmax}_{a \in \mathcal{A}_t} (\theta^{\top} x_a)}$).
-\\Since the noise is centered and assumed to be the same for all arms, our regret is just the expectation of the difference between the maximum reward and the reward received.
+\\[5mm]What we call regret at iteration $t$ is sometimes called \emph{pseudo-regret} : ${\theta^{\top}(x_{a_t^*} - x_{a_t})}$ where $a_t$ was the arm pulled and $a_t^*$ was the arm maximizing the expected reward (${a_t^* = \mathrm{argmax}_{a \in \mathcal{A}_t} (\theta^{\top} x_a)}$).
+\\Since the noise is centered, our regret is just the expectation of the difference between the maximum reward and the reward received. Considering this \emph{pseudo-regret} makes sense: if the noise is independent of the arm selected ($\epsilon_{a,t} = \epsilon_a$), then the noise term cancels out in this difference.
 \section{Presentation of LinUCB}
 
 \subsection{Principle}
 
 In all bandit problems, there is a trade-off between exploitation and exploration: to minimize his cumulative regret, the agent must pull the best arm (exploitation), but to do so he must know the best arm (exploration). Pulling all arms uniformly results in a very good knowledge of their distributions, but in poor exploitation, while always pulling the arm which appears best so far ('naive' algorithm) performs badly too, because the best arm can give a poor reward the first time, and never be pulled again.
 %
-\\[5mm]LinUCB (Linear Upper Confidence Bound) algorithm is derived from the non-contextual algorithm UCB. It is an optimistic algorithm, because it chooses the arms which has the highest upper confidence bound.
+\\[5mm]LinUCB (Linear Upper Confidence Bound) algorithm is derived from the non-contextual algorithm UCB. It is an optimistic algorithm, because it chooses the arms which has the highest upper confidence bound for its mean reward, $\theta^{\top}_a$.
 %
 \\The principle of this algorithm is, at each iteration, to compute an estimate for $\theta$ and an upper confidence bound for each of the available arms (both based on previous observations), then to pull the arm which has the highest UCB, update the observations made so far, and move to next iteration, where a new estimate of $\theta$ is computed, etc.
 %
@@ -78,7 +78,8 @@ $$\hat{\theta}_t= (D_t^{\top} D_t + I_d)^{-1} D_t^{\top} R_t$$
 which is the formula for a least square ridge regression with regularization parameter equal to 1.
 %TODO influence of this parameter ?
 %
-\\\begin{algorithm}[H]
+\\[5mm]The pseudo-code for LinUCB is the following:
+\\[3mm]\begin{algorithm}[H]
  \KwData{bandit $\mathcal{A}$, exploration parameter $\alpha$, NbSamples, horizon $T$}
  $A_1 = I_d$ \;
  $b_1 = 0$ \;
@@ -103,7 +104,7 @@ which is the formula for a least square ridge regression with regularization par
 \vspace{5mm}The code can be found in \texttt{linUCB.m}.
 %
 \subsection{Computation of the UCB}
-Since noise is unpredictable, the algorithm only focuses on the mean reward for an arm, $x_a^{\top} \theta$.
+Since noise is unpredictable, the algorithm only focuses on the expected reward for an arm, $\theta^{\top} x_a$, or equivalently $x_a^{\top} \theta$.
 \\Using the previous notations $D_t$ and $R_t$, the difference between the real and estimated rewards at time $t$ for arm $a \in \mathcal{A}_t$ is:
 $$\begin{aligned} x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta &= x_a^{\top} A^{-1}_tb_t - x_a^{\top}A_t^{-1} A_t \theta
 \\& = x_a^{\top} A^{-1}_t b_t - x_a^{\top}A_t^{-1} (I_d + D^{\top}_tD_t) \theta
@@ -130,7 +131,7 @@ $$\begin{aligned} \mathbb{P}( \vert x_a^{\top} A^{-1}_t D^{\top}_t (R_t - D_t \t
 \\ &\leq 2 e^{-2 \alpha^2}
 \\ &= \frac{\delta}{ \mathrm{K}}  % T \,
 \end{aligned}$$
-Using a union bound for the K possible arms, we get a uniform bound with probability $1 - \delta$.
+Using a union bound for the K possible arms in $\mathcal{A}_t$, we get a uniform bound with probability $1 - \delta$.
 \\Combining the bound on the first term and second term, with probability $1 - \delta$, 
 $$\vert x_a^{\top} \hat{\theta}_t - x_a^{\top} \theta \vert \leq (1 + \alpha) \sqrt{x^{\top}_a A_t^{-1} x_a}$$
 where $\alpha = \sqrt{\frac{\mathrm{log} (2K/\delta)}{2}}$. %TODO there's an extra K here... (K = K)
@@ -150,6 +151,7 @@ corresponds to a naive version, where the arm which is pulled is just the one wh
 \caption{Regret curves for LinUCB with different exploration parameters}
 \end{figure}
 %TODO mention that this is only one trajectory, but gives an idea of the best alpha. See that low and high alphas perform poorly.
+%TODO mention that alpha should change over time.
 
 \section{Comparison with contextual Thompson sampling}
 
