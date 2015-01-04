@@ -191,8 +191,13 @@ Computing $f(t,a)$ is the key of the algorithm; it is related to the upper bound
 $$\Vert \hat{\theta}_t - \theta \Vert_{A_t} 
 \leq 
 \sigma^2 \sqrt{2 \, \mathrm{log} ( \frac{ \vert A_t \vert^{1/2} }{\delta})} + 1$$
-Where $\Vert u \Vert_A = \sqrt{u^{\top} M u }$ ($u$ is a $d\times 1$ vector, $M$ is a $d\times d$ matrix).
-\\If $A$ is invertible, then for all $u, v$ we have $\vert u^{\top} v \vert \leq \Vert u \Vert_M \Vert v \Vert_{M^{-1}}$, so if we apply this to $M = A^{-1}_t$, $u =x_a$ and $v =  \hat{\theta}_t - \theta$, we get an upper bound on $\vert x_a^{\top} \theta - x_a^{\top} \hat{\theta}_t \vert$ with probability $1-\delta$ : 
+Where $\Vert u \Vert_A = \sqrt{u^{\top} M u }$ ($u$ is a $d\times 1$ vector, $M$ is a $d\times d$ symmetric definite positive matrix matrix).
+\\If $A$ is invertible, then for all $u, v$ we have $\vert u^{\top} v \vert \leq \Vert u \Vert_M \Vert v \Vert_{M^{-1}}$, because since $M$ is symmetric definite positive, there exists a symmetric definite positive matrix $S$ such that $S^2 = M$, and we have:
+ $$\begin{aligned}\vert u^{\top} v \vert &= \vert u^{\top}S^{\top} S^{-1} v \vert 
+ \\&\leq \Vert Su \Vert \Vert S^{-1}v \Vert 
+ \\&\leq \Vert u \Vert_M \Vert v \Vert_{M^{-1}}
+ \end{aligned}$$
+If we apply this to $M = A^{-1}_t$ (which is symmetric definite positive because $A_t$ is), $u =x_a$ and $v =  \hat{\theta}_t - \theta$, we get an upper bound on $\vert x_a^{\top} \theta - x_a^{\top} \hat{\theta}_t \vert$ with probability $1-\delta$ : 
 $$f(t,a) =  \Vert x_a \Vert_{A^{-1}_t} (\sigma^2 \sqrt{2 \, \mathrm{log} ( \frac{ \vert A_t \vert^{1/2} }{\delta})} + 1)$$
 \subsection{Comparison with LinUCB}
 
