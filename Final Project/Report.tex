@@ -264,12 +264,12 @@ Typically, the OFUL algorithm is very similar to linUCB but $\alpha$ is replaced
 \begin{figure}[H]
 	\centering
 	\noindent\includegraphics[scale=0.5]{oful.png}
-	\caption{Regret for OFUL algorithm}
+	\caption{In blue, regret for OFUL algorithm}
 \end{figure}
 
 The final regret value is here around 400 whereas it was around 200 for LinUCB with the best fitted $\alpha$.
 \\The best arm was effectively the most pulled and was pulled 922 times, similar to 944 for LinUCB. But, for a given sample, linUCB detects slightly better which arm is the best among the pool.
-\\Nevertheless, OFUL was here used with its defaults parameters, and we state in fact that OFUL is very similar to LinUCB with $\alpha = 1$.
+\\Nevertheless, OFUL was here used with its defaults parameters, and we state in fact that OFUL is very similar to LinUCB with $\alpha = 8$ for this problem setup and horizon length.
 %
 %
 \section*{Conclusion}
