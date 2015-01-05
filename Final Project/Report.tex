@@ -271,6 +271,11 @@ The final regret value is here around 400 whereas it was around 200 for LinUCB w
 \\Nevertheless, OFUL was here used with its defaults parameters, and we state in fact that OFUL is very similar to LinUCB with $\alpha = 1$.
 %
 %
+\section*{Conclusion}
+Contextual linear multi-armed bandit problem is a simple setup for a bandit problem whose arm evolve with time and are dependent. The three algorithms we studied for a  all rely on estimating the linear parameter $\theta$; but they differ on how they decide which arm to pull. \\LinUCB and OFUL have a similar principle, estimating an upper bound on the reward, and choosing the one with maximum upper bound, hence their title of "optimistic algorithms". Both depend on an exploration parameter, quantifying the trade off between exploration and exploitation, and whose optimal choice can be determined through Monte-Carlo simulations.
+\\On the other hand, Thompson sampling makes an assumption on $\theta$'s distribution, and draws estimated rewards according to these. The choice of the distribution is also to be tuned, and guaranties on the regret are obtainable
+
+%
 \newpage
 \begin{thebibliography}{9}
 
