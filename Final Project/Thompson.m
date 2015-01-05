@@ -1,5 +1,6 @@
-function [ rew, draws, reg, Na, Sa ] = Thompson( T, delta, Arms, theta, sigma_noise, nb_samples )
+function [ rew, draws, reg, Na, Sa ] = Thompson( T, delta, Arms, theta, sigma_noise, nb_samples, seed )
 
+rng(seed);
 d = size(theta, 1); % theta should be vertical
 K = length(Arms);
 A = eye(d);
