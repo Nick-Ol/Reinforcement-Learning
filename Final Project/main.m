@@ -15,11 +15,12 @@ true_rewards_exp = zeros(1, NbArms1);
 for i=1:NbArms1
     true_rewards_exp(i)= Arms{i}'*theta1;
 end
-
+hist(true_rewards_exp, 20);
+title('Histogram of mean rewards');
 [best_rew, best_arm] = max(true_rewards_exp);
 
 sigma_noise = 1;
-T = 1000; % horizon
+T = 10000; % horizon
 delta = 0.05; % concentration inequality holds with proba 1-delta
 alpha = 1 + sqrt(log(2/delta)/2);
 % Nb_arms1 articles, nb_samples tested at each iteration

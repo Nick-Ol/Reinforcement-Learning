@@ -45,12 +45,19 @@ The $K$ multi-armed bandit with partial observation setting is well-studied: at 
 \\[5mm]For all our implementations, unless otherwise specified, we have chosen the following parameters :
 \\- horizon: $T =10,000$ draws
 \\- dimension of the feature space: $d = 100$
-\\- total number of arms: N $= 1,000$
-\\- number of arms the agent can pull from at each time $t$: K = $100$
+\\- total number of arms: $N = 1,000$
+\\- number of arms the agent can pull from at each time $t$: $K = 100$
 \\- probability that the considered concentration inequality holds: $\delta = 0.05$
-%TODO how did we chose these ?
+\\- seed for all our generators, so the results are reproducible and algorithms can be compared: $s = 1$
 %
-\\[5mm]What we call regret at iteration $t$ is sometimes called \emph{pseudo-regret} : ${\theta^{\top}(x_{a_t^*} - x_{a_t})}$ where $a_t$ was the arm pulled and $a_t^*$ was the arm maximizing the expected reward (${a_t^* = \mathrm{argmax}_{a \in \mathcal{A}_t} (\theta^{\top} x_a)}$).
+\\[5mm]The best arm is number 912, giving $0.98$ on average. The repartition of the $N$ mean rewards is as follow:
+\begin{figure}[H]
+\centering
+\noindent\includegraphics[scale=0.4]{hist_mean_rewards.png}
+\caption{Histogram of mean rewards for our 1,000 arms}
+\end{figure}
+%
+\vspace{5mm}What we call regret at iteration $t$ is sometimes called \emph{pseudo-regret} : ${\theta^{\top}(x_{a_t^*} - x_{a_t})}$ where $a_t$ was the arm pulled and $a_t^*$ was the arm maximizing the expected reward (${a_t^* = \mathrm{argmax}_{a \in \mathcal{A}_t} (\theta^{\top} x_a)}$).
 \\Since the noise is centered, our regret is just the expectation of the difference between the maximum reward and the reward received. Considering this \emph{pseudo-regret} makes sense: if the noise is independent of the arm selected ($\epsilon_{a,t} = \epsilon_a$), then the noise term cancels out in this difference.
 \section{Presentation of LinUCB}
 
