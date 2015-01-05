@@ -58,13 +58,13 @@ for alpha = alpha_range
     regret_alpha(i,:) = cumsum(reg_alpha);
     legendInfo{i+1} = sprintf('Regret for linUCB with alpha = %f', alpha);
     
-    i = i+1;
+    i = i+1
 end
 
 figure;
 hold on
 plot(1:T, regret_naive)
-plot(1:T,regret_alpha(:,1:end))
+plot(1:T,regret_alpha(:,1:T))
 legend(legendInfo,'Location','northwest')
 hold off
 
