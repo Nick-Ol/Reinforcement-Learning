@@ -47,8 +47,8 @@ plot(1:T, regret_naive)
 legend('Naive')
 
 %% Influence of the exploration rate alpha
-nb_alphas = 7;
-alpha_range = logsample(.01, 1, nb_alphas);
+nb_alphas = 10;
+alpha_range = logsample(.01, 3, nb_alphas);
 regret_alpha = zeros(nb_alphas,T);
 legendInfo = cell(1, nb_alphas+1);
 legendInfo{1}= 'Regret for naive';
@@ -65,11 +65,11 @@ figure;
 hold on
 plot(1:T, regret_naive)
 plot(1:T,regret_alpha(:,1:end))
-legend(legendInfo)
+legend(legendInfo,'Location','northwest')
 hold off
 
 %select the alpha which gives the smallest regret at horizon :
-[alpha_best_val, alpha_best_idx] = min(reg_alpha(:,T));
+[alpha_best_val, alpha_best_idx] = min(regret_alpha(:,T));
 alpha_best = alpha_range(alpha_best_idx);
 
 %% Disjoint Linear Model
