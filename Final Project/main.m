@@ -68,7 +68,7 @@ legend(legendInfo)
 hold off
 
 %select the alpha which gives the smallest regret at horizon :
-[alpha_best_val, alpha_best_idx] = min(reg_alpha(:,n));
+[alpha_best_val, alpha_best_idx] = min(reg_alpha(:,T));
 alpha_best = alpha_range(alpha_best_idx);
 
 %% Disjoint Linear Model
