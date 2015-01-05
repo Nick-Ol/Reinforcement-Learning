@@ -149,13 +149,16 @@ The higher $\alpha$, the larger the confidence sets: the algorithm is very 'susp
 \begin{figure}[H]
 \centering
 \noindent\includegraphics[scale=0.3]{regrets_alphas.png}
-\caption{Regret curves for LinUCB with different exploration parameters}
+\caption{Regret curves for LinUCB with different exploration parameters and square root curve in black}
 \end{figure}
 
 We represented some particular trajectories here, but we observe similar results on other draws. If we wanted to be sure about the best $\alpha$, we could estimate the regrets for different values using Monte Carlo methods.
-\\We see that the best value for $\alpha$ is $0.036$ here.
-%TODO See that low and high alphas perform poorly.
-%TODO mention that alpha should change over time.
+%
+\\LinUCB algorithm approaches a regret of $O(\sqrt{T})$, which we can see plotted in black on the graph. We state that the curves effectively follow a square root tendency.
+%
+\\We see that the best value for $\alpha$ is $0.036$ here. On this example, we observe that for high values of $\alpha$ the algorithm performs more poorly.
+%
+\\We could improve linUCB by making $\alpha$ change over time. Indeed, we want to explore a lot the different arms at the beginning, but to increase the rate of exploitation with time, which would be modeled by taking a high value of $\alpha$ to start with, and then decrease it. The OFUL algorithm that we will see later deals with this time-dependency.
 
 \subsection{LinUCB for disjoint linear models}	
 
@@ -176,9 +179,7 @@ Then, at iteration $t$, we pull the arm $a_t$ corresponding to $a_t = \mathrm{ar
 	\caption{Regret for disjoint linear model at horizon 20,000 for 1000 arms, with 100 potentially arms pulled at each step, for $\sigma = 1$}
 \end{figure}
 
-According to the article, this algorithm approaches a regret of $O(\sqrt{T})$.
-%
-\\By analyzing the arms pulled, we see that whereas the best arm had an expected reward of 0.7997, the most pulled arm had one of 0.7737, which is quite close, and it was pulled 1094 times. The best potential arm was pulled 683 times.
+By analyzing the arms pulled, we see that whereas the best arm had an expected reward of 0.7997, the most pulled arm had one of 0.7737, which is quite close, and it was pulled 1094 times. The best potential arm was pulled 683 times.
 %
 \\The code can be found in \texttt{linUCB\_multipletheta.m}.
 

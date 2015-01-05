@@ -65,6 +65,7 @@ figure;
 hold on
 plot(1:T, regret_naive)
 plot(1:T,regret_alpha(:,1:T))
+plot(1:T, sqrt(1:T), 'k', 'LineWidth',2)
 legend(legendInfo,'Location','northwest')
 hold off
 
